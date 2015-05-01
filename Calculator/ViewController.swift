@@ -44,12 +44,12 @@ class ViewController: UIViewController
         }
     }
     
-    var displayValue : Double {
+    var displayValue : Double? {
         get {
                 return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
         }
         set {
-            display.text = "\(newValue)" // converts a value to a string
+            display.text = "\(newValue!)" // converts a value to a string
             userIsInTheMiddleOfTypingSomething = false
         }
     }
@@ -59,8 +59,8 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingSomething == true {
             userIsInTheMiddleOfTypingSomething = false
             if (NSNumberFormatter().numberFromString(display.text!) != nil){ // (P) CHECKING FOR REAL (DOUBLE) NUMBERS
-                if let result = brain.pushOperand(displayValue){
-                    displayValue = result
+                if let result = brain.pushOperand(displayValue!){
+                    displayValue = Double(result)
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
             } else {
