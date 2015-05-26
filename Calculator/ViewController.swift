@@ -10,17 +10,14 @@ import UIKit
 
 class ViewController: UIViewController
 {
-    // "properties" == "instance variable"
     @IBOutlet weak var display: UILabel! // (P) '!' == "implicitely unwrapped optional"
     @IBOutlet weak var pastEqns: UILabel! // (P) this is where we store the eqns and past input
-    
     var userIsInTheMiddleOfTypingSomething = false
     var brain = CalculatorBrain()
     
     
     @IBAction func appendDigit(sender: UIButton) {
-        // (P) this code has SWIFT create "Optional" type - this can only be of TWO values: NIL or ("Something")
-        
+        // (P)"Optional" : can only be of TWO values: NIL or ("Something")
         // (P) Note that adding '!' Unwraps the optional
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTypingSomething {
@@ -30,52 +27,58 @@ class ViewController: UIViewController
             userIsInTheMiddleOfTypingSomething = true
         }
     } // end appendDigit
-    
 
+    
     @IBAction func deleteDigit(sender: UIButton) {
-        
         if userIsInTheMiddleOfTypingSomething {
             let predecessorIndex = display.text!.endIndex.predecessor()
             self.display.text = self.display.text?.substringToIndex(predecessorIndex)
             if display.text!.endIndex == display.text!.startIndex {
                 userIsInTheMiddleOfTypingSomething = false
-                displayValue = 0
+                displayValue = nil
             }
         }
     }
+    
     
     var displayValue : Double? {
         get {
                 return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
         }
         set {
-            display.text = "\(newValue!)" // converts a value to a string
-            userIsInTheMiddleOfTypingSomething = false
+            
+            if (newValue != nil){
+                display.text = "\(newValue!)" // converts a value to a string
+                userIsInTheMiddleOfTypingSomething = false
+            } else {
+                display.text = " "
+            }
         }
     }
+  
+    
     
     @IBAction func enter() {
-        
         if userIsInTheMiddleOfTypingSomething == true {
             userIsInTheMiddleOfTypingSomething = false
-            if (NSNumberFormatter().numberFromString(display.text!) != nil){ // (P) CHECKING FOR REAL (DOUBLE) NUMBERS
+            
+            if (NSNumberFormatter().numberFromString(display.text!) != nil){ // CHECKING FOR (DOUBLE)
                 if let result = brain.pushOperand(displayValue!){
                     displayValue = Double(result)
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
             } else {
-                displayValue = 0
+                displayValue = nil
             }
         }
-        
     }
     
     
+    
     @IBAction func operate(sender: UIButton) {
-        
         let operation = sender.currentTitle!
-  
         switch operation{
+            
             case "±":
                 let firstIndex = display.text!.startIndex
                 if display.text![firstIndex] == "-"{
@@ -95,9 +98,10 @@ class ViewController: UIViewController
                 }
                 if let result = brain.performOperation(operation){
                     displayValue = result
-                    if operation != "π"
+                    if (operation != "π")&&(operation != "M")
                         {pastEqns.text! +=  " [\(sender.currentTitle!)] (=) "}
-                    else { pastEqns.text! +=  " [\(sender.currentTitle!)] "}
+                    else
+                        { pastEqns.text! +=  " [\(sender.currentTitle!)] "}
                 } else {
                     displayValue = 0
                 }

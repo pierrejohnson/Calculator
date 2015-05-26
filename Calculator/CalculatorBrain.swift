@@ -20,6 +20,8 @@ class CalculatorBrain
         case UnaryOperation(String, Double -> Double)    //(P) the 2nd argument is a FUNCTION TYPE
         case BinaryOperation(String, (Double, Double) -> Double)
         case PiOperation (String)
+        case StoreOperation (String) // ?
+        case RecallOperation (String) // ?
         case ClrOperation(String)
         case SignOperation(String)
         
@@ -38,14 +40,18 @@ class CalculatorBrain
                     return symbol
                 case .SignOperation(let symbol):
                     return symbol
+                case .RecallOperation(let symbol): // ?
+                    return symbol
+                case .StoreOperation(let symbol):  // ?
+                    return symbol
                 }
             }
         }
     }
 
    private var opStack = [Op]()           //(P) the '=' works as an initializer in the declaration
-   private var knownOps = [String:Op]()   //(P) note that this is the same as : var knownOps = Dictionary<String,Op>()
-    
+   private var knownOps = [String:Op]()   //(P) note that this is the same as : var knownOps = Dictionary<String,Op>()i
+    private var variableValues = [String:Double]()  //(P) this is our new structure to store the variables that we put in there. it is populated as we are declaring it - syntictacly
     
     init(){
         
@@ -63,6 +69,8 @@ class CalculatorBrain
         learnOp(Op.PiOperation("π"))
         learnOp(Op.ClrOperation("clr"))
         learnOp(Op.SignOperation("±"))
+        learnOp(Op.StoreOperation("↪︎M"))
+        learnOp(Op.RecallOperation("M"))
     }
 
     private func evaluate(ops :[Op]) -> (result: Double?, remainingOps: [Op]) {
@@ -100,14 +108,19 @@ class CalculatorBrain
     
                 case .SignOperation(let sign):
                     return (0.0, remainingOps)
+                
+                case .StoreOperation(let varStore):
+                    // this is where we want to store the variable that was just passed - we need to get it from the display!
+                    return (0.0, remainingOps)
+                
+                case .RecallOperation(let varRecall):
+                    // this is where we call back the stored variable previously set by the user
+                    return (0.0, remainingOps)
             }
     
         }
         return (nil , ops)
     }
-    
-    
-    
     
     func evaluate() -> Double? {
         let (result, remainder ) = evaluate(opStack) // (P) diff version of calling
@@ -120,11 +133,17 @@ class CalculatorBrain
         return evaluate()
     }
     
+    // (P) we return the value stored for set symbol else we return nil
+    func pushOperand(symbol : String) -> Double? {
+        if let content = variableValues[symbol]{
+            return content
+        }
+        return nil
+    }
+    
     func performOperation(symbol: String) ->Double?{
         if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP
-            if operation.description != "±" {
-                opStack.append(operation)
-            }
+            opStack.append(operation)
             if operation.description == "clr"{
                 opStack.removeAll(keepCapacity: false)
             }
