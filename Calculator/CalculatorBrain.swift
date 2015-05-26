@@ -17,19 +17,22 @@ class CalculatorBrain
     private enum Op : Printable // the "Printable" is a PROTOCOL.
     {
         case Operand(Double)
+        case Variable(String) // ?
         case UnaryOperation(String, Double -> Double)    //(P) the 2nd argument is a FUNCTION TYPE
         case BinaryOperation(String, (Double, Double) -> Double)
         case PiOperation (String)
-        case StoreOperation (String) // ?
-        case RecallOperation (String) // ?
         case ClrOperation(String)
         case SignOperation(String)
+        case StoreOperation (String, Double) // ? (we want to associate a Double with a String
+        case RecallOperation (String) // ?
         
         var description: String {
             get {
                 switch self{
                 case .Operand(let operand):
                     return "\(operand)"
+                case .Variable(let symbol):     // ?
+                    return symbol
                 case .UnaryOperation(let symbol,_):
                     return symbol
                 case .BinaryOperation(let symbol, _):
@@ -40,18 +43,19 @@ class CalculatorBrain
                     return symbol
                 case .SignOperation(let symbol):
                     return symbol
+                case .StoreOperation((let symbol, _)):  // ?
+                    return symbol
                 case .RecallOperation(let symbol): // ?
                     return symbol
-                case .StoreOperation(let symbol):  // ?
-                    return symbol
+
                 }
             }
         }
     }
 
-   private var opStack = [Op]()           //(P) the '=' works as an initializer in the declaration
-   private var knownOps = [String:Op]()   //(P) note that this is the same as : var knownOps = Dictionary<String,Op>()i
-    private var variableValues = [String:Double]()  //(P) this is our new structure to store the variables that we put in there. it is populated as we are declaring it - syntictacly
+    private var opStack = [Op]()           //(P) the '=' works as an initializer in the declaration
+    private var knownOps = [String:Op]()   //(P) note that this is the same as : var knownOps = Dictionary<String,Op>()i
+    var variableValues = [String:Double]()  //(P) this is our new structure to store the variables that we put in there. it is populated as we are declaring it - syntictacly
     
     init(){
         
@@ -69,7 +73,7 @@ class CalculatorBrain
         learnOp(Op.PiOperation("π"))
         learnOp(Op.ClrOperation("clr"))
         learnOp(Op.SignOperation("±"))
-        learnOp(Op.StoreOperation("↪︎M"))
+        learnOp(Op.StoreOperation("↪︎M", 9.9))  // (P) vague feeling that this will in fact prove to be incorrect
         learnOp(Op.RecallOperation("M"))
     }
 
@@ -83,13 +87,13 @@ class CalculatorBrain
             
                 case .Operand(let operand):
                     return (operand, remainingOps)
-              
+                case .Variable(let symbol):                         // ?
+                    return (variableValues[symbol], remainingOps)
                 case .UnaryOperation(_, let operation):
                     let operandEvaluation = evaluate(remainingOps)
                     if let operand = operandEvaluation.result{
                         return (operation(operand), operandEvaluation.remainingOps)
                     }
-        
                 case .BinaryOperation(_, let operation):
                     let op1Evaluation = evaluate (remainingOps)
                     if let operand = op1Evaluation.result {
@@ -98,24 +102,17 @@ class CalculatorBrain
                             return (operation(operand, operand2), op2Evaluation.remainingOps)
                         }
                     }
-                
                 case .PiOperation(let pi):
                     return (M_PI, remainingOps)
-                
                 case .ClrOperation(let clr):
                     remainingOps.removeAll(keepCapacity: false)
                     return (0.0, remainingOps)
-    
                 case .SignOperation(let sign):
                     return (0.0, remainingOps)
-                
-                case .StoreOperation(let varStore):
-                    // this is where we want to store the variable that was just passed - we need to get it from the display!
-                    return (0.0, remainingOps)
-                
-                case .RecallOperation(let varRecall):
-                    // this is where we call back the stored variable previously set by the user
-                    return (0.0, remainingOps)
+                case .StoreOperation(let varStore):             // (P) because we have stored the variable, we should not even be in this stack
+                    return (7.7, remainingOps)
+                case .RecallOperation(let varRecall):           // (P) Again, the store and retrieve should not even be in the stack
+                    return (7.7, remainingOps)
             }
     
         }
@@ -133,12 +130,14 @@ class CalculatorBrain
         return evaluate()
     }
     
-    // (P) we return the value stored for set symbol else we return nil
+    // (P) this one pushes the new variable onto our stack then returns evaluate.
     func pushOperand(symbol : String) -> Double? {
-        if let content = variableValues[symbol]{
-            return content
-        }
-        return nil
+
+        //
+        opStack.append(Op.Variable(symbol))
+        //
+
+        return evaluate()
     }
     
     func performOperation(symbol: String) ->Double?{

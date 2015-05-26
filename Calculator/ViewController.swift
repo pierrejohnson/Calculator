@@ -75,6 +75,19 @@ class ViewController: UIViewController
     
     
     
+    
+    @IBAction func storeM(sender: UIButton) {
+        brain.variableValues["M"] = displayValue
+        displayValue = 80085.0
+    }
+    
+    
+    @IBAction func recallM(sender: UIButton) {
+        displayValue = brain.variableValues["M"]
+        userIsInTheMiddleOfTypingSomething = true
+    }
+    
+    
     @IBAction func operate(sender: UIButton) {
         let operation = sender.currentTitle!
         switch operation{
