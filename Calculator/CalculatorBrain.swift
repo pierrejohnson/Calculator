@@ -139,6 +139,7 @@ class CalculatorBrain
 
         return evaluate()
     }
+
     
     func performOperation(symbol: String) ->Double?{
         if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP

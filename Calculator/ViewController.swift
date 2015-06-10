@@ -40,10 +40,11 @@ class ViewController: UIViewController
         }
     }
     
-    
+    // this allows us to simply set "displayValue" accross the app so we don't have to manually set display, and have to switch between string and number everytime.
     var displayValue : Double? {
         get {
-                return NSNumberFormatter().numberFromString(display.text!)!.doubleValue
+                return NSNumberFormatter().numberFromString(display.text!)?.doubleValue
+
         }
         set {
             
@@ -61,14 +62,14 @@ class ViewController: UIViewController
     @IBAction func enter() {
         if userIsInTheMiddleOfTypingSomething == true {
             userIsInTheMiddleOfTypingSomething = false
-            
-            if (NSNumberFormatter().numberFromString(display.text!) != nil){ // CHECKING FOR (DOUBLE)
+
+            if (displayValue != nil){                                   //prevents accidentally pushing a nil
                 if let result = brain.pushOperand(displayValue!){
                     displayValue = Double(result)
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
             } else {
-                displayValue = nil
+                displayValue = nil // shouldn't this display a " "?
             }
         }
     }
@@ -78,12 +79,15 @@ class ViewController: UIViewController
     
     @IBAction func storeM(sender: UIButton) {
         brain.variableValues["M"] = displayValue
-        displayValue = 80085.0
+        displayValue = 80085.0 // Debug to make sure we get the store
+        display.text = "\" Not Really Stored!\""
+        userIsInTheMiddleOfTypingSomething = false
     }
     
     
     @IBAction func recallM(sender: UIButton) {
-        displayValue = brain.variableValues["M"]
+        //displayValue = brain.variableValues["M"]
+        display.text =  "\(displayValue)" // Should return NIL because not a number
         userIsInTheMiddleOfTypingSomething = true
     }
     
