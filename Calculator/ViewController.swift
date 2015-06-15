@@ -12,6 +12,8 @@ class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel! // (P) '!' == "implicitely unwrapped optional"
     @IBOutlet weak var pastEqns: UILabel! // (P) eqns and past input
+    @IBOutlet weak var eqDescription: UILabel! // (P) where we show the current equation
+    
     var userIsInTheMiddleOfTypingSomething = false
     var brain = CalculatorBrain()
     
@@ -63,12 +65,14 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingSomething == true {
             userIsInTheMiddleOfTypingSomething = false
 
-            if (displayValue != nil){                                   //prevents accidentally pushing a nil
+            if (displayValue != nil){
                 if let result = brain.pushOperand(displayValue!){
                     displayValue = Double(result)
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
-            } else {
+                // THIS IS WHERE WE UPDATE eqDisplay Label
+                eqDescription.text! += "*"
+            }else{
                 displayValue = nil
             }
         }
@@ -113,6 +117,7 @@ class ViewController: UIViewController
                 }
                 if operation == "clr" {
                     pastEqns.text! =  " "
+                    eqDescription.text! = " "
                     brain.variableValues.removeAll(keepCapacity: false)
                 }
                 if let result = brain.performOperation(operation){

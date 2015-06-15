@@ -697,12 +697,13 @@
                     </view>
                     <connections>
                         <outlet property="display" destination="TtS-6D-SFn" id="Z0I-qH-x9b"/>
+                        <outlet property="eqDescription" destination="2q4-CF-ucz" id="11p-Yu-kdK"/>
                         <outlet property="pastEqns" destination="iTL-JH-Vji" id="uip-D9-ELj"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="505" y="252"/>
+            <point key="canvasLocation" x="-132" y="245"/>
         </scene>
     </scenes>
 </document>
