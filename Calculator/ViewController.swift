@@ -69,7 +69,7 @@ class ViewController: UIViewController
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
             } else {
-                displayValue = nil // shouldn't this display a " "?
+                displayValue = nil
             }
         }
     }
