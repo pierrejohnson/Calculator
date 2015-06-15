@@ -11,7 +11,7 @@ import UIKit
 class ViewController: UIViewController
 {
     @IBOutlet weak var display: UILabel! // (P) '!' == "implicitely unwrapped optional"
-    @IBOutlet weak var pastEqns: UILabel! // (P) this is where we store the eqns and past input
+    @IBOutlet weak var pastEqns: UILabel! // (P) eqns and past input
     var userIsInTheMiddleOfTypingSomething = false
     var brain = CalculatorBrain()
     
@@ -78,17 +78,18 @@ class ViewController: UIViewController
     
     
     @IBAction func storeM(sender: UIButton) {
-        brain.variableValues["M"] = displayValue
-        displayValue = 80085.0 // Debug to make sure we get the store
-        display.text = "\" Not Really Stored!\""
+        brain.variableValues["M"] = displayValue    // we store the value
+        display.text = "Stored!"
+        pastEqns.text! +=  " [->M]"                 // for debug
         userIsInTheMiddleOfTypingSomething = false
     }
     
     
     @IBAction func recallM(sender: UIButton) {
-        //displayValue = brain.variableValues["M"]
-        display.text =  "\(displayValue)" // Should return NIL because not a number
-        userIsInTheMiddleOfTypingSomething = true
+        displayValue = brain.variableValues["M"]
+        brain.pushOperand("M")                      // returns evaluate()
+        pastEqns.text! +=  " [M]"
+        //userIsInTheMiddleOfTypingSomething = true
     }
     
     
@@ -112,6 +113,7 @@ class ViewController: UIViewController
                 }
                 if operation == "clr" {
                     pastEqns.text! =  " "
+                    brain.variableValues.removeAll(keepCapacity: false)
                 }
                 if let result = brain.performOperation(operation){
                     displayValue = result
@@ -120,7 +122,7 @@ class ViewController: UIViewController
                     else
                         { pastEqns.text! +=  " [\(sender.currentTitle!)] "}
                 } else {
-                    displayValue = 0
+                    displayValue = nil
                 }
                 return
         }
