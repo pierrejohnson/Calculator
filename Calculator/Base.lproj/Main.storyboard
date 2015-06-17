@@ -83,16 +83,6 @@
                                     <action selector="appendDigit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="g99-Br-oDh"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bx5-N0-uD6">
-                                <rect key="frame" x="182" y="337" width="75" height="112"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
-                                <state key="normal" title="3">
-                                    <color key="titleShadowColor" red="1" green="0.32167605910000002" blue="0.33369189929999998" alpha="1" colorSpace="calibratedRGB"/>
-                                </state>
-                                <connections>
-                                    <action selector="appendDigit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="q39-zv-2gF"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xof-KZ-OEe">
                                 <rect key="frame" x="101" y="454" width="76" height="113"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
@@ -331,6 +321,9 @@
                                     <color key="titleColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <color key="titleShadowColor" red="1" green="0.32167605910000002" blue="0.33369189929999998" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
+                                <connections>
+                                    <action selector="question:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sx0-P6-iyj"/>
+                                </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Equation Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2q4-CF-ucz">
                                 <rect key="frame" x="16" y="28" width="568" height="21"/>
@@ -355,6 +348,16 @@
                                 </state>
                                 <connections>
                                     <action selector="recallM:" destination="BYZ-38-t0r" eventType="touchUpInside" id="TJ0-Ki-wvR"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" placeholderIntrinsicWidth="infinite" placeholderIntrinsicHeight="infinite" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bx5-N0-uD6">
+                                <rect key="frame" x="182" y="337" width="75" height="112"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="24"/>
+                                <state key="normal" title="3">
+                                    <color key="titleShadowColor" red="1" green="0.32167605910000002" blue="0.33369189929999998" alpha="1" colorSpace="calibratedRGB"/>
+                                </state>
+                                <connections>
+                                    <action selector="appendDigit:" destination="BYZ-38-t0r" eventType="touchUpInside" id="q39-zv-2gF"/>
                                 </connections>
                             </button>
                         </subviews>

@@ -67,6 +67,7 @@ class CalculatorBrain
         learnOp(Op.PiOperation("π"))
         learnOp(Op.ClrOperation("clr"))
         learnOp(Op.SignOperation("±"))
+        learnOp(Op.Variable("M"))
     }
 
     private func evaluate(ops :[Op]) -> (result: Double?, remainingOps: [Op]) {
@@ -138,4 +139,56 @@ class CalculatorBrain
         }
         return evaluate()
     }
+    
+    
+    func describeEqn()-> String? {
+        var result = ""
+        let sortedString = stackToString(result, ops: opStack)
+        
+        return sortedString.resultingString
+    }
+    
+    
+    
+    
+// stackToString takes our stack and recursively produces the string that examplifies the result
+    private func stackToString(resultString: String, ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
+        
+        if !ops.isEmpty {
+            var remainingOps = ops
+            var tempString = resultString
+            let op = remainingOps.removeLast()
+            
+            switch op{
+            case .Operand(let operand):
+                tempString += operand.description
+                return (tempString, remainingOps)
+                
+            case .Variable(let symbol):
+                if (variableValues[symbol] != nil){
+                    tempString += symbol
+                    return ( tempString, remainingOps)
+                }else{
+                    return ("?", remainingOps)  // returns nil if the var has not been set
+                }
+                
+            case .UnaryOperation(let symbol, _):
+                tempString += symbol + "(" + stackToString(tempString, ops: remainingOps).resultingString! + ")"
+                return (tempString, remainingOps)
+                
+            case .BinaryOperation(let symbol, _):
+                tempString += stackToString(tempString, ops: remainingOps).resultingString! + symbol + stackToString(tempString, ops: remainingOps).resultingString!
+                return (tempString, remainingOps)
+                
+
+            default:
+                return ("default", remainingOps)
+            
+            }
+            
+        }
+        return (nil , ops)
+    }
+    
+    
 }

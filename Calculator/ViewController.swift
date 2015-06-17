@@ -65,17 +65,18 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingSomething == true {
             userIsInTheMiddleOfTypingSomething = false
 
+            
             if (displayValue != nil){
                 if let result = brain.pushOperand(displayValue!){
                     displayValue = Double(result)
                     pastEqns.text! +=  " [\(display.text!)]"
                 }
-                // THIS IS WHERE WE UPDATE eqDisplay Label
-                eqDescription.text! += "*"
-            }else{
-                displayValue = nil
+                // THIS IS WHERE WE UPDATE eqDisplay Label... but how? use a recursive function that polls from the brain?
+                eqDescription.text = brain.describeEqn()
             }
         }
+        eqDescription.text = brain.describeEqn()
+
     }
     
     
@@ -93,7 +94,6 @@ class ViewController: UIViewController
         displayValue = brain.variableValues["M"]
         brain.pushOperand("M")                      // returns evaluate()
         pastEqns.text! +=  " [M]"
-        //userIsInTheMiddleOfTypingSomething = true
     }
     
     
@@ -122,6 +122,7 @@ class ViewController: UIViewController
                 }
                 if let result = brain.performOperation(operation){
                     displayValue = result
+                    enter() // Just added to update the new stackToString on unary ops. Might need refactoring later.
                     if (operation != "π")&&(operation != "M")
                         {pastEqns.text! +=  " [\(sender.currentTitle!)] (=) "}
                     else
