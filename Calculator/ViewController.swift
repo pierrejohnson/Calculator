@@ -62,13 +62,14 @@ class ViewController: UIViewController
     
     
     @IBAction func enter() {
-        if userIsInTheMiddleOfTypingSomething == true { // prevents accidentally passing nil and crashing.
+        if userIsInTheMiddleOfTypingSomething == true { // prevents passing nil and crashing.
             userIsInTheMiddleOfTypingSomething = false
-            if let result = brain.pushOperand(displayValue!){
-                displayValue = Double(result)
-                pastEqns.text! +=  " [\(display.text!)]"
+            if displayValue != nil{
+                if let result = brain.pushOperand(displayValue!){
+                    displayValue = Double(result)
+                    pastEqns.text! +=  " [\(display.text!)]"
+                }
             }
-
             eqDescription.text = brain.describeEqn() // updates eqDisplay Label
             
         }
@@ -81,13 +82,15 @@ class ViewController: UIViewController
     
     @IBAction func storeM(sender: UIButton) {
         brain.variableValues["M"] = displayValue    // we store the value
-        display.text = "Stored!"
+        display.text = "Stored!" // would like to havethis fade off for .3s.
+        displayValue = brain.evaluate()
         pastEqns.text! +=  " [->M]"                 // for debug
         userIsInTheMiddleOfTypingSomething = false
     }
     
     
     @IBAction func recallM(sender: UIButton) {
+        enter()
         displayValue = brain.variableValues["M"]
         brain.pushOperand("M")                      // returns evaluate()
         pastEqns.text! +=  " [M]"

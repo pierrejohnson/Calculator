@@ -129,7 +129,6 @@ class CalculatorBrain
         return evaluate()
     }
 
-    
     func performOperation(symbol: String) ->Double?{
         if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP
             opStack.append(operation)
@@ -139,7 +138,6 @@ class CalculatorBrain
         }
         return evaluate()
     }
-    
     
     func describeEqn()-> String? {
         var sortedString  = stackToString(opStack)
@@ -152,12 +150,7 @@ class CalculatorBrain
                 previousEqn  += ", " + cleanedOutput
                 cleanedOutput = previousEqn
         }
-        
         return cleanedOutput
-        
-        
-        
-        
     }
     
     // cleans the output well, could use serious refactor but does the job well and is extra...
@@ -247,7 +240,7 @@ class CalculatorBrain
     }
 
     
-// stackToString takes our stack and recursively produces the string that examplifies the result
+    // recursively produces the string that examplifies current equation
     private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
         
         if !ops.isEmpty {
@@ -262,7 +255,7 @@ class CalculatorBrain
                 if (variableValues[symbol] != nil){
                     return ( symbol, remainingOps)
                 }else{
-                    return ("?", remainingOps)  // if the var has not been set
+                    return ("m", remainingOps)  // if the var has not been set
                 }
                 
             case .UnaryOperation(let symbol, _):
@@ -280,12 +273,12 @@ class CalculatorBrain
                 }
             case .PiOperation(let pi):
                 return (op.description, remainingOps)
-            case .Variable(let symbol):
-                if (variableValues[symbol] != nil){
-                    return (variableValues[symbol]?.description, remainingOps)
-                }else{
-                    return ("?", remainingOps)  // neturns nil if the var has not been set
-                }
+//            case .Variable(let symbol):
+//                if (variableValues[symbol] != nil){
+//                    return (variableValues[symbol]?.description, remainingOps)
+//                }else{
+//                    return ("?", remainingOps)  // neturns nil if the var has not been set
+//                }
                 
             default:
                 return ("default", remainingOps)
