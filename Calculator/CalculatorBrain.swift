@@ -147,21 +147,24 @@ class CalculatorBrain
         return cleanedOutput
     }
     
-    
+    // cleans the output well, could use serious refactor but does the job well and is extra...
     private func cleanMyOutput(inputString:String) -> String {
+        var outputString = cleanDotZeo(inputString)
+        return outputString
+    }
+    
+    
+    private func cleanDotZeo(inputString:String) -> String {
         var outputString = inputString
         var iterator = outputString.startIndex
-        
-        // how do we cleanup the line output?
-        // (1) by getting rid of the unnecessary '.0'
         while (iterator != outputString.endIndex){
             
-           if outputString[iterator] == "."{
+            if outputString[iterator] == "."{
                 iterator = iterator.successor()
                 if outputString[iterator] == "0"{
-                   iterator = iterator.successor()
+                    iterator = iterator.successor()
                     if iterator == outputString.endIndex {
-                    iterator=iterator.predecessor()
+                        iterator=iterator.predecessor()
                     }
                     switch outputString[iterator]{
                     case "1","2","3","4","5","6","7","8","9":
@@ -186,10 +189,9 @@ class CalculatorBrain
             }
             iterator = iterator.successor()
         }
-        
-        
         return outputString
     }
+    
     
 // stackToString takes our stack and recursively produces the string that examplifies the result
     private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
@@ -210,7 +212,7 @@ class CalculatorBrain
                 }
                 
             case .UnaryOperation(let symbol, _):
-                return (symbol + "(" + stackToString(remainingOps).resultingString! + ")", remainingOps)
+                return (symbol + "(" + stackToString(remainingOps).resultingString! + ")", stackToString(remainingOps).remainingOps)
                 
             case .BinaryOperation(let symbol, _):
                 let op1conv = stackToString(remainingOps)
