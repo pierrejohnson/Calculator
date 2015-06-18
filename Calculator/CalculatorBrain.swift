@@ -143,7 +143,7 @@ class CalculatorBrain
     
     func describeEqn()-> String? {
         var result = ""
-        let sortedString = stackToString(result, ops: opStack)
+        let sortedString = stackToString(opStack)
         
         return sortedString.resultingString
     }
@@ -152,35 +152,35 @@ class CalculatorBrain
     
     
 // stackToString takes our stack and recursively produces the string that examplifies the result
-    private func stackToString(resultString: String, ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
+    private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
         
         if !ops.isEmpty {
             var remainingOps = ops
-            var tempString = resultString
             let op = remainingOps.removeLast()
             
             switch op{
             case .Operand(let operand):
-                tempString += operand.description
-                return (tempString, remainingOps)
+                return (operand.description, remainingOps)
                 
             case .Variable(let symbol):
                 if (variableValues[symbol] != nil){
-                    tempString += symbol
-                    return ( tempString, remainingOps)
+                    return ( symbol, remainingOps)
                 }else{
-                    return ("?", remainingOps)  // returns nil if the var has not been set
+                    return ("?", remainingOps)  // if the var has not been set
                 }
                 
             case .UnaryOperation(let symbol, _):
-                tempString += symbol + "(" + stackToString(tempString, ops: remainingOps).resultingString! + ")"
-                return (tempString, remainingOps)
+                return (symbol + "(" + stackToString(remainingOps).resultingString! + ")", remainingOps)
                 
             case .BinaryOperation(let symbol, _):
-                tempString += "(" + stackToString(  stackToString(tempString, ops: stackToString(tempString, ops: remainingOps).remainingOps).resultingString! + symbol , ops: remainingOps).resultingString! + ")"
-                return (tempString, remainingOps)
+                let op1conv = stackToString(remainingOps)
+                if let op1 = op1conv.resultingString {
+                    let op2conv = stackToString(op1conv.remainingOps)
+                    if let op2 = op2conv.resultingString {
+                        return ("(" + op2 + symbol + op1 + ")", op2conv.remainingOps)
+                    }
+                }
                 
-
             default:
                 return ("default", remainingOps)
             
