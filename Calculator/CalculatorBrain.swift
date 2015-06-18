@@ -177,7 +177,7 @@ class CalculatorBrain
                 return (tempString, remainingOps)
                 
             case .BinaryOperation(let symbol, _):
-                tempString += stackToString(tempString, ops: remainingOps).resultingString! + symbol + stackToString(tempString, ops: remainingOps).resultingString!
+                tempString += stackToString( stackToString(tempString, ops: stackToString(tempString, ops: remainingOps).remainingOps).resultingString! + symbol , ops: remainingOps).resultingString!
                 return (tempString, remainingOps)
                 
 
