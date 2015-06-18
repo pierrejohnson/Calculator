@@ -143,14 +143,18 @@ class CalculatorBrain
     
     func describeEqn()-> String? {
         let sortedString = stackToString(opStack)
-        let cleanedOutput = cleanMyOutput(sortedString.resultingString!)
+        let cleanedOutput = cleanMyOutput(sortedString.resultingString)
         return cleanedOutput
     }
     
     // cleans the output well, could use serious refactor but does the job well and is extra...
-    private func cleanMyOutput(inputString:String) -> String {
-        var outputString = cleanDotZero(inputString)
-        return cleanParentheses(outputString)
+    private func cleanMyOutput(inputString:String?) -> String {
+        if inputString != nil{
+            var outputString = cleanDotZero(inputString!)
+            return cleanParentheses(outputString)
+        } else {
+            return " "
+        }
     }
     
     

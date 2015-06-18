@@ -62,18 +62,15 @@ class ViewController: UIViewController
     
     
     @IBAction func enter() {
-        if userIsInTheMiddleOfTypingSomething == true {
+        if userIsInTheMiddleOfTypingSomething == true { // prevents accidentally passing nil and crashing.
             userIsInTheMiddleOfTypingSomething = false
-
-            
-            if (displayValue != nil){
-                if let result = brain.pushOperand(displayValue!){
-                    displayValue = Double(result)
-                    pastEqns.text! +=  " [\(display.text!)]"
-                }
-                // THIS IS WHERE WE UPDATE eqDisplay Label... but how? use a recursive function that polls from the brain?
-                eqDescription.text = brain.describeEqn()
+            if let result = brain.pushOperand(displayValue!){
+                displayValue = Double(result)
+                pastEqns.text! +=  " [\(display.text!)]"
             }
+
+            eqDescription.text = brain.describeEqn() // updates eqDisplay Label
+            
         }
         eqDescription.text = brain.describeEqn()
 
@@ -111,6 +108,7 @@ class ViewController: UIViewController
                 userIsInTheMiddleOfTypingSomething = true
                 return
             
+            
             default:
                 if userIsInTheMiddleOfTypingSomething {
                     enter()
@@ -122,12 +120,13 @@ class ViewController: UIViewController
                 }
                 if let result = brain.performOperation(operation){
                     displayValue = result
-                    enter() // Just added to update the new stackToString on unary ops. Might need refactoring later.
+                    enter()
                     if (operation != "π")&&(operation != "M")
                         {pastEqns.text! +=  " [\(sender.currentTitle!)] (=) "}
                     else
                         { pastEqns.text! +=  " [\(sender.currentTitle!)] "}
                 } else {
+                    enter()
                     displayValue = nil
                 }
                 return
