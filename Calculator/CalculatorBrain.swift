@@ -142,9 +142,22 @@ class CalculatorBrain
     
     
     func describeEqn()-> String? {
-        let sortedString = stackToString(opStack)
-        let cleanedOutput = cleanMyOutput(sortedString.resultingString)
+        var sortedString  = stackToString(opStack)
+        var cleanedOutput = cleanMyOutput(sortedString.resultingString)
+        var previousEqn   = ""
+        
+        while (sortedString.remainingOps.count > 0){
+                sortedString  = stackToString(sortedString.remainingOps)
+                previousEqn   = cleanMyOutput(sortedString.resultingString)
+                previousEqn  += ", " + cleanedOutput
+                cleanedOutput = previousEqn
+        }
+        
         return cleanedOutput
+        
+        
+        
+        
     }
     
     // cleans the output well, could use serious refactor but does the job well and is extra...
@@ -156,7 +169,6 @@ class CalculatorBrain
             return " "
         }
     }
-    
     
     private func cleanDotZero(inputString:String) -> String {
         var outputString = inputString
