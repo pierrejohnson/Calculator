@@ -142,14 +142,54 @@ class CalculatorBrain
     
     
     func describeEqn()-> String? {
-        var result = ""
         let sortedString = stackToString(opStack)
-        
-        return sortedString.resultingString
+        let cleanedOutput = cleanMyOutput(sortedString.resultingString!)
+        return cleanedOutput
     }
     
     
-    
+    private func cleanMyOutput(inputString:String) -> String {
+        var outputString = inputString
+        var iterator = outputString.startIndex
+        
+        // how do we cleanup the line output?
+        // (1) by getting rid of the unnecessary '.0'
+        while (iterator != outputString.endIndex){
+            
+           if outputString[iterator] == "."{
+                iterator = iterator.successor()
+                if outputString[iterator] == "0"{
+                   iterator = iterator.successor()
+                    if iterator == outputString.endIndex {
+                    iterator=iterator.predecessor()
+                    }
+                    switch outputString[iterator]{
+                    case "1","2","3","4","5","6","7","8","9":
+                        break
+                    case "0":
+                        if iterator.successor() == outputString.endIndex {
+                            iterator = iterator.predecessor().predecessor()
+                            outputString.removeAtIndex(iterator.successor())
+                            outputString.removeAtIndex(iterator.successor())
+                            break
+                        } else {
+                            break
+                        }
+                        
+                    default:
+                        iterator = iterator.predecessor().predecessor().predecessor()
+                        outputString.removeAtIndex(iterator.successor())
+                        outputString.removeAtIndex(iterator.successor())
+                        break
+                    }
+                }
+            }
+            iterator = iterator.successor()
+        }
+        
+        
+        return outputString
+    }
     
 // stackToString takes our stack and recursively produces the string that examplifies the result
     private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
