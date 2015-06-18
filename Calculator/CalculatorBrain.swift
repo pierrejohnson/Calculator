@@ -149,12 +149,12 @@ class CalculatorBrain
     
     // cleans the output well, could use serious refactor but does the job well and is extra...
     private func cleanMyOutput(inputString:String) -> String {
-        var outputString = cleanDotZeo(inputString)
-        return outputString
+        var outputString = cleanDotZero(inputString)
+        return cleanParentheses(outputString)
     }
     
     
-    private func cleanDotZeo(inputString:String) -> String {
+    private func cleanDotZero(inputString:String) -> String {
         var outputString = inputString
         var iterator = outputString.startIndex
         while (iterator != outputString.endIndex){
@@ -192,6 +192,44 @@ class CalculatorBrain
         return outputString
     }
     
+    private func cleanParentheses(inputString:String) -> String {
+        var outputString = inputString
+        var iterator = outputString.startIndex
+        while (iterator != outputString.endIndex){
+            
+//            if outputString[iterator] == "."{
+//                iterator = iterator.successor()
+//                if outputString[iterator] == "0"{
+//                    iterator = iterator.successor()
+//                    if iterator == outputString.endIndex {
+//                        iterator=iterator.predecessor()
+//                    }
+//                    switch outputString[iterator]{
+//                    case "1","2","3","4","5","6","7","8","9":
+//                        break
+//                    case "0":
+//                        if iterator.successor() == outputString.endIndex {
+//                            iterator = iterator.predecessor().predecessor()
+//                            outputString.removeAtIndex(iterator.successor())
+//                            outputString.removeAtIndex(iterator.successor())
+//                            break
+//                        } else {
+//                            break
+//                        }
+//                        
+//                    default:
+//                        iterator = iterator.predecessor().predecessor().predecessor()
+//                        outputString.removeAtIndex(iterator.successor())
+//                        outputString.removeAtIndex(iterator.successor())
+//                        break
+//                    }
+//                }
+//            }
+            iterator = iterator.successor()
+        }
+        return outputString
+    }
+
     
 // stackToString takes our stack and recursively produces the string that examplifies the result
     private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
@@ -220,7 +258,17 @@ class CalculatorBrain
                     let op2conv = stackToString(op1conv.remainingOps)
                     if let op2 = op2conv.resultingString {
                         return ("(" + op2 + symbol + op1 + ")", op2conv.remainingOps)
+                    } else {
+                        return ("(" + op1 + symbol +  "?)", op2conv.remainingOps)
                     }
+                }
+            case .PiOperation(let pi):
+                return (op.description, remainingOps)
+            case .Variable(let symbol):
+                if (variableValues[symbol] != nil){
+                    return (variableValues[symbol]?.description, remainingOps)
+                }else{
+                    return ("?", remainingOps)  // neturns nil if the var has not been set
                 }
                 
             default:
