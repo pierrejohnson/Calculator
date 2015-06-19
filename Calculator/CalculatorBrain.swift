@@ -232,8 +232,11 @@ class CalculatorBrain
             
             switch op{
             case .Operand(let operand):
-                return (operand.description, remainingOps)
-                
+                if operand.description[operand.description.startIndex] == "-" {
+                    return ("(" + operand.description + ")", remainingOps)
+                }else{
+                    return (operand.description, remainingOps)
+                }
             case .Variable(let symbol):
                 if (variableValues[symbol] != nil){
                     return ( symbol, remainingOps)
@@ -263,10 +266,10 @@ class CalculatorBrain
                         }
                         
                     }else{
-                        return ("(" + op1 + symbol +  "?)", op2conv.remainingOps)
+                        return ("(" + op1 + symbol +  "?)", op2conv.remainingOps) // I think we should return nothing
                     }
                 }else{
-                    return ("(?" + symbol + "?)", stackToString(remainingOps, precedence: lastOperation).remainingOps)
+                    return ("(?" + symbol + "?)", stackToString(remainingOps, precedence: lastOperation).remainingOps) // I think we should return nothing
                 }
             case .PiOperation(let pi):
                 return (op.description, remainingOps)
