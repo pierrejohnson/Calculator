@@ -44,7 +44,21 @@ class CalculatorBrain
 
                 }
             }
-        }
+        } // end var descri
+        
+        var precedence: String {
+            switch self{
+            case .BinaryOperation(let symbol, _):
+                if symbol == "+" || symbol == "−"{
+                    return "addsub"
+                }
+                return "multdiv"
+
+            default:
+                return "none"
+            }
+        } // end precedene
+        
     }
 
     private var opStack = [Op]()           //(P) the '=' works as an initializer in the declaration
@@ -140,17 +154,17 @@ class CalculatorBrain
     }
     
     func describeEqn()-> String? {
-        var sortedString  = stackToString(opStack)
+        var sortedString  = stackToString(opStack, precedence: "none")
         var cleanedOutput = cleanMyOutput(sortedString.resultingString)
         var previousEqn   = ""
         
         while (sortedString.remainingOps.count > 0){
-                sortedString  = stackToString(sortedString.remainingOps)
+                sortedString  = stackToString(sortedString.remainingOps, precedence: "none")
                 previousEqn   = cleanMyOutput(sortedString.resultingString)
                 previousEqn  += ", " + cleanedOutput
                 cleanedOutput = previousEqn
         }
-        
+        // it would be nice if the "=" only showed on a binary or unary op....
         cleanedOutput += " ="
         return cleanedOutput
     }
@@ -159,7 +173,7 @@ class CalculatorBrain
     private func cleanMyOutput(inputString:String?) -> String {
         if inputString != nil{
             var outputString = cleanDotZero(inputString!)
-            return cleanParentheses(outputString)
+            return outputString
         } else {
             return " "
         }
@@ -202,52 +216,17 @@ class CalculatorBrain
         }
         return outputString
     }
-    
-    private func cleanParentheses(inputString:String) -> String {
-        var outputString = inputString
-        var iterator = outputString.startIndex
-        while (iterator != outputString.endIndex){
-            
-//            if outputString[iterator] == "."{
-//                iterator = iterator.successor()
-//                if outputString[iterator] == "0"{
-//                    iterator = iterator.successor()
-//                    if iterator == outputString.endIndex {
-//                        iterator=iterator.predecessor()
-//                    }
-//                    switch outputString[iterator]{
-//                    case "1","2","3","4","5","6","7","8","9":
-//                        break
-//                    case "0":
-//                        if iterator.successor() == outputString.endIndex {
-//                            iterator = iterator.predecessor().predecessor()
-//                            outputString.removeAtIndex(iterator.successor())
-//                            outputString.removeAtIndex(iterator.successor())
-//                            break
-//                        } else {
-//                            break
-//                        }
-//                        
-//                    default:
-//                        iterator = iterator.predecessor().predecessor().predecessor()
-//                        outputString.removeAtIndex(iterator.successor())
-//                        outputString.removeAtIndex(iterator.successor())
-//                        break
-//                    }
-//                }
-//            }
-            iterator = iterator.successor()
-        }
-        return outputString
-    }
+
 
     
+    
     // recursively produces the string that examplifies current equation
-    private func stackToString(ops: [Op]) -> (resultingString: String?, remainingOps: [Op]) {
+    private func stackToString(ops: [Op],  precedence : String) -> (resultingString: String?, remainingOps: [Op]) {
         
         if !ops.isEmpty {
             var remainingOps = ops
             let op = remainingOps.removeLast()
+            var lastOperation = precedence
             
             switch op{
             case .Operand(let operand):
@@ -257,30 +236,31 @@ class CalculatorBrain
                 if (variableValues[symbol] != nil){
                     return ( symbol, remainingOps)
                 }else{
-                    return ("m", remainingOps)  // if the var has not been set
+                    return ("m", remainingOps)  // if the var has not been set, as debug
                 }
                 
             case .UnaryOperation(let symbol, _):
-                return (symbol + "(" + stackToString(remainingOps).resultingString! + ")", stackToString(remainingOps).remainingOps)
+                return (symbol + "(" + stackToString(remainingOps,precedence: "unary").resultingString! + ")", stackToString(remainingOps, precedence: "unary").remainingOps)
                 
             case .BinaryOperation(let symbol, _):
-                let op1conv = stackToString(remainingOps)
+                
+                let op1conv = stackToString(remainingOps, precedence: op.precedence)
                 if let op1 = op1conv.resultingString {
-                    let op2conv = stackToString(op1conv.remainingOps)
+                    let op2conv = stackToString(op1conv.remainingOps, precedence: op.precedence)
                     if let op2 = op2conv.resultingString {
-                        return ("(" + op2 + symbol + op1 + ")", op2conv.remainingOps)
-                    } else {
+   
+                        if lastOperation != op.precedence{
+                            return ("(" + op2 + symbol + op1 + ")", op2conv.remainingOps)
+                        }else{
+                            return (op2 + symbol + op1, op2conv.remainingOps)
+                        }
+                        
+                    }else{
                         return ("(" + op1 + symbol +  "?)", op2conv.remainingOps)
                     }
                 }
             case .PiOperation(let pi):
                 return (op.description, remainingOps)
-//            case .Variable(let symbol):
-//                if (variableValues[symbol] != nil){
-//                    return (variableValues[symbol]?.description, remainingOps)
-//                }else{
-//                    return ("?", remainingOps)  // neturns nil if the var has not been set
-//                }
                 
             default:
                 return ("default", remainingOps)
