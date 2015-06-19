@@ -248,8 +248,8 @@ class CalculatorBrain
                 if let op1 = op1conv.resultingString {
                     let op2conv = stackToString(op1conv.remainingOps, precedence: op.precedence)
                     if let op2 = op2conv.resultingString {
-   
-                        if lastOperation != op.precedence{
+                        // if the nested op has previous operation of the same type, we skip adding parenthesis.
+                        if  (lastOperation == "addsub" && op.precedence == "multdiv") || (lastOperation == "multdiv" && op.precedence == "addsub"){
                             return ("(" + op2 + symbol + op1 + ")", op2conv.remainingOps)
                         }else{
                             return (op2 + symbol + op1, op2conv.remainingOps)
