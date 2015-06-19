@@ -97,18 +97,42 @@ class ViewController: UIViewController
     }
     
     
+
+    @IBAction func undo(sender: UIButton) {
+        
+        // this button should combine both clr and undo:
+        // if USER IS IN THE MIDDLE OF TYPING: (then we just "←" for them)
+        //     else
+        // UNDO the last thing that was done
+        if userIsInTheMiddleOfTypingSomething {
+            deleteDigit(sender)
+        }
+        pastEqns.text! +=  " [😅]"
+    }
+    
     @IBAction func operate(sender: UIButton) {
         let operation = sender.currentTitle!
         switch operation{
             
             case "±":
+                
+                
+                // if the user was not in the middle of typing, we should clear the screen
+                if !userIsInTheMiddleOfTypingSomething{
+                    display.text! = " "
+                }
+                
+                userIsInTheMiddleOfTypingSomething = true
                 let firstIndex = display.text!.startIndex
                 if display.text![firstIndex] == "-"{
-                    display.text!.removeAtIndex(firstIndex)
+                    display.text!.replaceRange(firstIndex ... firstIndex, with: " ")
                 } else {
-                    display.text!.insert("-", atIndex: firstIndex)
+                    if display.text![firstIndex] == " "{
+                        display.text!.replaceRange(firstIndex ... firstIndex, with: "-")
+                    } else {
+                        display.text!.insert("-", atIndex: firstIndex)
+                    }
                 }
-                userIsInTheMiddleOfTypingSomething = true
                 return
             
             

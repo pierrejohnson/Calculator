@@ -53,7 +53,9 @@ class CalculatorBrain
                     return "addsub"
                 }
                 return "multdiv"
-
+            case .UnaryOperation (let symbol):
+                return "unary"
+                
             default:
                 return "none"
             }
@@ -117,9 +119,9 @@ class CalculatorBrain
                     return (M_PI, remainingOps)
                 case .ClrOperation(let clr):
                     remainingOps.removeAll(keepCapacity: false)
-                    return (0.0, remainingOps)
+                    return (nil, remainingOps)
                 case .SignOperation(let sign):
-                    return (0.0, remainingOps)
+                    return (nil, remainingOps)
             }
     
         }
