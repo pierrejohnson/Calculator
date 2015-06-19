@@ -150,6 +150,8 @@ class CalculatorBrain
                 previousEqn  += ", " + cleanedOutput
                 cleanedOutput = previousEqn
         }
+        
+        cleanedOutput += " ="
         return cleanedOutput
     }
     
