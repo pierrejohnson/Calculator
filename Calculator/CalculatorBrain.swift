@@ -165,7 +165,9 @@ class CalculatorBrain
                 cleanedOutput = previousEqn
         }
         // it would be nice if the "=" only showed on a binary or unary op....
-        cleanedOutput += " ="
+        if opStack.last?.precedence == "addsub" || opStack.last?.precedence == "multdiv" || opStack.last?.precedence == "unary" {
+            cleanedOutput += " ="
+        }
         return cleanedOutput
     }
     
@@ -240,7 +242,12 @@ class CalculatorBrain
                 }
                 
             case .UnaryOperation(let symbol, _):
-                return (symbol + "(" + stackToString(remainingOps,precedence: "unary").resultingString! + ")", stackToString(remainingOps, precedence: "unary").remainingOps)
+                let op1conv = stackToString(remainingOps, precedence: "unary")
+                if let op1 = op1conv.resultingString {
+                    return (symbol + "(" + op1 + ")", stackToString(remainingOps, precedence: "unary").remainingOps)
+                }else{
+                    return (symbol + "(?)", stackToString(remainingOps, precedence: "unary").remainingOps)
+                }
                 
             case .BinaryOperation(let symbol, _):
                 
@@ -258,6 +265,8 @@ class CalculatorBrain
                     }else{
                         return ("(" + op1 + symbol +  "?)", op2conv.remainingOps)
                     }
+                }else{
+                    return ("(?" + symbol + "?)", stackToString(remainingOps, precedence: lastOperation).remainingOps)
                 }
             case .PiOperation(let pi):
                 return (op.description, remainingOps)
@@ -268,7 +277,7 @@ class CalculatorBrain
             }
             
         }
-        return (nil , ops)
+        return (nil, ops)
     }
     
     
