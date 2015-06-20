@@ -129,36 +129,109 @@ class CalculatorBrain
     }
     
     func evaluate() -> Double? {
-        let (result, remainder ) = evaluate(opStack) // (P) diff version of calling
-        println( "\(opStack) = \(result) with \(remainder) left over")
+        let (result, remainder ) = evaluate(opStack)
         return result
     }
+
+    func evaluateAndReportErrors() -> (result: Double?,error: String){
+        let (result, remainder, error ) = evaluateAndReportErrors(opStack)
+        return (result, error)
+    }
     
-    func pushOperand(operand: Double) ->Double? {
+
+        // pretty much a copy of evaluate that returns the errors on the display instead of nil.
+    private func evaluateAndReportErrors(ops :[Op]) -> (result: Double?, remainingOps: [Op], error : String) {
+        
+        // unset variable <s>
+        // missing operand
+        // divide by zero
+        // square root of neg
+        // ???
+
+        if !ops.isEmpty {
+            var remainingOps = ops
+            let op = remainingOps.removeLast()
+            
+            switch op{
+                
+            case .Operand(let operand):
+                return (operand, remainingOps, "none")
+            case .Variable(let symbol):
+                if (variableValues[symbol] != nil){
+                    return (variableValues[symbol], remainingOps, "none")
+                }else{
+                    return (nil, remainingOps, "M has not been set")  // neturns nil if the var has not been set
+                }
+            case .UnaryOperation(_, let operation):
+                let operandEvaluation = evaluateAndReportErrors(remainingOps)
+                if let operand = operandEvaluation.result{
+                    return (operation(operand), operandEvaluation.remainingOps, "none")
+                }else{
+                    return (nil, operandEvaluation.remainingOps, "UnaryOp - Operand error")
+                }
+                
+            case .BinaryOperation(_, let operation):
+                let op1Evaluation = evaluateAndReportErrors (remainingOps)
+                if let operand = op1Evaluation.result {
+                    let op2Evaluation = evaluateAndReportErrors (op1Evaluation.remainingOps)
+                    if let operand2 = op2Evaluation.result {
+                        return (operation(operand, operand2), op2Evaluation.remainingOps, "none")
+                    }else{
+                        return (nil, op2Evaluation.remainingOps, "BinaryOp - Operand 2 error")
+                    }
+               
+                }else{
+                    return (nil, op1Evaluation.remainingOps, "BinaryOp - Operand 1 error")
+                }
+                
+                
+                
+                
+            case .PiOperation(let pi):
+                return (M_PI, remainingOps, "none")
+            case .ClrOperation(let clr):
+                remainingOps.removeAll(keepCapacity: false)
+                return (nil, remainingOps, "none")
+            case .SignOperation(let sign):
+                return (nil, remainingOps, "none")
+            }
+            
+        }
+        return (nil , ops, "ops is Empty")
+
+    
+    
+    }
+    
+
+    
+    func pushOperand(operand: Double) ->(result: Double?, error: String) {
         opStack.append(Op.Operand(operand))
-        return evaluate()
+        return evaluateAndReportErrors()
     }
     
     // pushes the new variable onto our stack then returns evaluate()
-    func pushOperand(symbol : String) -> Double? {
+    func pushOperand(symbol : String) -> (result: Double?, error: String) {
         opStack.append(Op.Variable(symbol))
-        return evaluate()
+        return evaluateAndReportErrors()
     }
 
     // for our Undo
-    func popOperand() -> Double?{
-        opStack.removeLast()
-        return evaluate()
+    func popOperand() -> (result:Double?, error: String){
+        if !opStack.isEmpty{
+            opStack.removeLast()
+        }
+        return evaluateAndReportErrors()
         
     }
-    func performOperation(symbol: String) ->Double?{
+    func performOperation(symbol: String) ->(result:Double?, error: String){
         if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP
             opStack.append(operation)
             if operation.description == "clr"{
                 opStack.removeAll(keepCapacity: false)
             }
         }
-        return evaluate()
+        return evaluateAndReportErrors()
     }
     
     func describeEqn()-> String? {

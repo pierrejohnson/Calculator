@@ -65,10 +65,10 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingSomething == true { // prevents passing nil and crashing.
             userIsInTheMiddleOfTypingSomething = false
             if displayValue != nil{
-                if let result = brain.pushOperand(displayValue!){
-                    displayValue = Double(result)
-                    pastEqns.text! +=  " [\(display.text!)]"
-                }
+                let tresult = brain.pushOperand(displayValue!)
+                displayValue = Double(tresult.result!)
+                pastEqns.text! +=  " [\(display.text!)]"
+                
             }
             eqDescription.text = brain.describeEqn() // updates eqDisplay Label
             
@@ -83,7 +83,7 @@ class ViewController: UIViewController
     @IBAction func storeM(sender: UIButton) {
         brain.variableValues["M"] = displayValue    // we store the value
         display.text = "Stored!" // would like to havethis fade off for .3s.
-        displayValue = brain.evaluate()
+        displayValue = brain.evaluateAndReportErrors().result
         pastEqns.text! +=  " [->M]"                 // for debug
         userIsInTheMiddleOfTypingSomething = false
     }
@@ -107,7 +107,7 @@ class ViewController: UIViewController
         if userIsInTheMiddleOfTypingSomething {
             deleteDigit(sender)
         }else{
-            displayValue = brain.popOperand()
+            displayValue = brain.popOperand().result
             userIsInTheMiddleOfTypingSomething = false
             eqDescription.text = brain.describeEqn()
         }
@@ -149,7 +149,7 @@ class ViewController: UIViewController
                     eqDescription.text! = " "
                     brain.variableValues.removeAll(keepCapacity: false)
                 }
-                if let result = brain.performOperation(operation){
+                if let result = brain.performOperation(operation).result{
                     displayValue = result
                     enter()
                     if (operation != "π")&&(operation != "M")
