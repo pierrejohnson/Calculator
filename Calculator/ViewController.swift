@@ -28,7 +28,7 @@ class ViewController: UIViewController
             display.text = digit
             userIsInTheMiddleOfTypingSomething = true
         }
-    } // end appendDigit
+    }
 
     
     @IBAction func deleteDigit(sender: UIButton) {
@@ -73,7 +73,7 @@ class ViewController: UIViewController
             eqDescription.text = brain.describeEqn() // updates eqDisplay Label
             
         }
-        eqDescription.text = brain.describeEqn()
+        eqDescription.text = brain.describeEqn() // updates description on enter(), even if user not typing anything -  note that we aren't pushing operand.
 
     }
     
@@ -90,7 +90,7 @@ class ViewController: UIViewController
     
     
     @IBAction func recallM(sender: UIButton) {
-        enter()
+       // enter() // why do we do that? JUST REMOVED  for 65 - M inputkeys
         displayValue = brain.variableValues["M"]
         brain.pushOperand("M")                      // returns evaluate()
         pastEqns.text! +=  " [M]"
@@ -106,8 +106,12 @@ class ViewController: UIViewController
         // UNDO the last thing that was done
         if userIsInTheMiddleOfTypingSomething {
             deleteDigit(sender)
+        }else{
+            displayValue = brain.popOperand()
+            userIsInTheMiddleOfTypingSomething = false
+            eqDescription.text = brain.describeEqn()
         }
-        pastEqns.text! +=  " [😅]"
+        pastEqns.text! += " [😅]"
     }
     
     @IBAction func operate(sender: UIButton) {

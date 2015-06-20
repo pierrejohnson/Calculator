@@ -145,6 +145,12 @@ class CalculatorBrain
         return evaluate()
     }
 
+    // for our Undo
+    func popOperand() -> Double?{
+        opStack.removeLast()
+        return evaluate()
+        
+    }
     func performOperation(symbol: String) ->Double?{
         if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP
             opStack.append(operation)
@@ -221,9 +227,6 @@ class CalculatorBrain
         return outputString
     }
 
-
-    
-    
     // recursively produces the string that examplifies current equation
     private func stackToString(ops: [Op],  precedence : String) -> (resultingString: String?, remainingOps: [Op]) {
         
