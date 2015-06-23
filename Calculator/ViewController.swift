@@ -60,6 +60,22 @@ class ViewController: UIViewController
     }
   
     
+    // the displayresult should get the display value
+    var displayResults : String? {
+        get {
+            return nil
+        }
+        set {
+            if (newValue != nil){
+                display.text = "\(newValue!)"
+            }
+        }
+    }
+    
+    
+    
+    
+    
     
     @IBAction func enter() {
         if userIsInTheMiddleOfTypingSomething == true { // prevents passing nil and crashing.
@@ -74,7 +90,11 @@ class ViewController: UIViewController
             
         }
         eqDescription.text = brain.describeEqn() // updates description on enter(), even if user not typing anything -  note that we aren't pushing operand.
-
+        
+      if brain.evaluateAndReportErrors().error != nil
+      {
+        displayResults = brain.evaluateAndReportErrors().error!
+        }
     }
     
     
@@ -90,10 +110,13 @@ class ViewController: UIViewController
     
     
     @IBAction func recallM(sender: UIButton) {
-       // enter() // why do we do that? JUST REMOVED  for 65 - M inputkeys
         displayValue = brain.variableValues["M"]
         brain.pushOperand("M")                      // returns evaluate()
         pastEqns.text! +=  " [M]"
+        if brain.evaluateAndReportErrors().error != nil
+        {
+            displayResults = brain.evaluateAndReportErrors().error!
+        }
     }
     
     
@@ -159,6 +182,10 @@ class ViewController: UIViewController
                 } else {
                     enter()
                     displayValue = nil
+                    if brain.evaluateAndReportErrors().error != nil
+                    {
+                        displayResults = brain.evaluateAndReportErrors().error!
+                    }
                 }
                 return
         }
