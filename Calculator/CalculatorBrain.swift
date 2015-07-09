@@ -6,7 +6,7 @@
 //  Copyright (c) 2015 AmenophisIII. All rights reserved.
 //
 
-import Foundation           // (P) note that there are no UI imports, this is just the base stuff
+import Foundation                                       // note that there are no UI imports, this is just the base stuff
 
 
 class CalculatorBrain
@@ -14,11 +14,11 @@ class CalculatorBrain
     
     // Swift has a cool feature where you can associate data with types/classes
     // TYPES are FUNCTIONS IN SWIFT
-    private enum Op : Printable // the "Printable" is a PROTOCOL.
+    private enum Op : Printable                         // the "Printable" is a PROTOCOL that enables the description
     {
         case Operand(Double)
-        case Variable(String) // ?
-        case UnaryOperation(String, Double -> Double)    //(P) the 2nd argument is a FUNCTION TYPE
+        case Variable(String)
+        case UnaryOperation(String, Double -> Double)   // 2nd arg is a fn() that tks a dbl and rtn a dbl
         case BinaryOperation(String, (Double, Double) -> Double)
         case PiOperation (String)
         case ClrOperation(String)
@@ -46,7 +46,7 @@ class CalculatorBrain
             }
         } 
         
-        var precedence: String {
+        var precedence: String {            // used to minimize parentheses
             switch self{
             case .BinaryOperation(let symbol, _):
                 if symbol == "+" || symbol == "−"{
@@ -59,13 +59,13 @@ class CalculatorBrain
             default:
                 return "none"
             }
-        } // end precedene
+        }
         
     }
 
-    private var opStack = [Op]()           //(P) the '=' works as an initializer in the declaration
-    private var knownOps = [String:Op]()   //(P) note that this is the same as : var knownOps = Dictionary<String,Op>()i
-    var variableValues = [String:Double]()  //(P) this is our new structure to store the variables that we put in there. it is populated as we are declaring it - syntacticly
+    private var opStack = [Op]()            // '=' works as an initializer in the declaration
+    private var knownOps = [String:Op]()    //  same as   knownOps = Dictionary<String,Op>()
+    var variableValues = [String:Double]()  // variable dicitionary
     
     init(){
         
@@ -93,18 +93,16 @@ class CalculatorBrain
             let op = remainingOps.removeLast()
             
             switch op{
-            
                 case .Operand(let operand):
                     return (operand, remainingOps)
                 case .Variable(let symbol):
-                    if (variableValues[symbol] != nil){
+                    if (variableValues[symbol] != nil) {
                         return (variableValues[symbol], remainingOps)
-                    }else{
-                        return (nil, remainingOps)  // neturns nil if the var has not been set
-                }
+                    }
+                    return (nil, remainingOps)
                 case .UnaryOperation(_, let operation):
                     let operandEvaluation = evaluate(remainingOps)
-                    if let operand = operandEvaluation.result{
+                    if let operand = operandEvaluation.result {
                         return (operation(operand), operandEvaluation.remainingOps)
                     }
                 case .BinaryOperation(_, let operation):
@@ -123,82 +121,57 @@ class CalculatorBrain
                 case .SignOperation(let sign):
                     return (nil, remainingOps)
             }
-    
         }
         return (nil , ops)
     }
     
     func evaluate() -> Double? {
-        let (result, remainder ) = evaluate(opStack)
+        let (result, remainder) = evaluate(opStack)
         return result
     }
 
-    func evaluateAndReportErrors() -> (result: Double?,error: String?){
-        let (result, remainder, error ) = evaluateAndReportErrors(opStack)
+    func evaluateAndReportErrors() -> (result: Double?, error: String?) {
+        let (result, remainder, error) = evaluateAndReportErrors(opStack)
         return (result, error)
     }
-    
 
-        // pretty much a copy of evaluate that returns the errors on the display instead of nil.
-    private func evaluateAndReportErrors(ops :[Op]) -> (result: Double?, remainingOps: [Op], error : String?) {
-        
-        // unset variable <s>
-        // missing operand
-        // divide by zero
-        // square root of neg
-        // ???
-
+    // == evaluate + error string
+    private func evaluateAndReportErrors(ops :[Op]) -> (result: Double?, remainingOps: [Op], error: String?) {
         if !ops.isEmpty {
             var remainingOps = ops
             let op = remainingOps.removeLast()
             
             switch op{
-                
             case .Operand(let operand):
                 return (operand, remainingOps, nil)
             case .Variable(let symbol):
                 if (variableValues[symbol] != nil){
                     return (variableValues[symbol], remainingOps, nil)
-                }else{
-                    return (nil, remainingOps, "var not been set")
                 }
+                return (nil, remainingOps, "var \(symbol) not set")
             case .UnaryOperation(_, let operation):
                 let operandEvaluation = evaluateAndReportErrors(remainingOps)
                 if let operand = operandEvaluation.result{
-   
                     if (op.description == "√") && (operand <= 0.0){
-                        return (operation(operand), operandEvaluation.remainingOps, "sqr(neg OP)!")
+                        return (operation(operand), operandEvaluation.remainingOps, "sqr(neg #)!")
                     }
                     return (operation(operand), operandEvaluation.remainingOps, nil)
-           
-                }else{
-                    return (nil, operandEvaluation.remainingOps, "Op error")
                 }
-                
+                return (nil, operandEvaluation.remainingOps, "Op error")
             case .BinaryOperation(_, let operation):
                 let op1Evaluation = evaluateAndReportErrors (remainingOps)
                 if let operand = op1Evaluation.result {
-                    
                     if (op.description == "÷") && (operand == 0.0){
                         return (nil, op1Evaluation.remainingOps, "Error: dividing by Zero!")
-                        
                     }
-                    
-                    
                     let op2Evaluation = evaluateAndReportErrors (op1Evaluation.remainingOps)
                     if let operand2 = op2Evaluation.result {
                         return (operation(operand, operand2), op2Evaluation.remainingOps, nil)
                     }else{
                         return (nil, op2Evaluation.remainingOps, "Op2 error")
                     }
-               
-                }else{
-                    return (nil, op1Evaluation.remainingOps, "Op1 error")
                 }
-                
-                
-                
-                
+                return (nil, op1Evaluation.remainingOps, "Op1 error")
             case .PiOperation(let pi):
                 return (M_PI, remainingOps, nil)
             case .ClrOperation(let clr):
@@ -207,42 +180,32 @@ class CalculatorBrain
             case .SignOperation(let sign):
                 return (nil, remainingOps, nil)
             }
-            
         }
         return (nil , ops, " ")
-
-    
-    
     }
     
-
-    
-    func pushOperand(operand: Double) ->(result: Double?, error: String?) {
+    func pushOperand(operand: Double) -> (result: Double?, error: String?) {
         opStack.append(Op.Operand(operand))
         return evaluateAndReportErrors()
     }
-    
-    // pushes the new variable onto our stack then returns evaluate()
+
+    // pushes a variable onto our stack then returns evaluate()
     func pushOperand(symbol : String) -> (result: Double?, error: String?) {
         opStack.append(Op.Variable(symbol))
         return evaluateAndReportErrors()
     }
 
-    // for our Undo
+    // Undo button
     func popOperand() -> (result:Double?, error: String?){
         if !opStack.isEmpty{
             opStack.removeLast()
         }
         return evaluateAndReportErrors()
-        
     }
-    func performOperation(symbol: String) ->(result:Double?, error: String?){
     
-           //checkOperation(symbol)
-        if let operation = knownOps[symbol] {      //(P) this is how you look something up in a dictionary -  note that the type is an OPTIONAL OP
-            // we have established that the op exists. now we can check the argument?
+    func performOperation(symbol: String) -> (result:Double?, error: String?) {
 
- 
+        if let operation = knownOps[symbol] {
             opStack.append(operation)
             if operation.description == "clr"{
                 opStack.removeAll(keepCapacity: false)
@@ -251,33 +214,30 @@ class CalculatorBrain
         return evaluateAndReportErrors()
     }
 
-    
     func describeEqn()-> String? {
         var sortedString  = stackToString(opStack, precedence: "none")
         var cleanedOutput = cleanMyOutput(sortedString.resultingString)
         var previousEqn   = ""
         
-        while (sortedString.remainingOps.count > 0){
+        while (sortedString.remainingOps.count > 0) {
                 sortedString  = stackToString(sortedString.remainingOps, precedence: "none")
                 previousEqn   = cleanMyOutput(sortedString.resultingString)
                 previousEqn  += ", " + cleanedOutput
                 cleanedOutput = previousEqn
         }
-        // it would be nice if the "=" only showed on a binary or unary op....
         if opStack.last?.precedence == "addsub" || opStack.last?.precedence == "multdiv" || opStack.last?.precedence == "unary" {
             cleanedOutput += " ="
         }
         return cleanedOutput
     }
     
-    // cleans the output well, could use serious refactor but does the job well and is extra...
+    // cleans the output
     private func cleanMyOutput(inputString:String?) -> String {
         if inputString != nil{
             var outputString = cleanDotZero(inputString!)
             return outputString
-        } else {
-            return " "
         }
+        return " "
     }
     
     private func cleanDotZero(inputString:String) -> String {
@@ -301,10 +261,8 @@ class CalculatorBrain
                             outputString.removeAtIndex(iterator.successor())
                             outputString.removeAtIndex(iterator.successor())
                             break
-                        } else {
-                            break
                         }
-                        
+                        break
                     default:
                         iterator = iterator.predecessor().predecessor().predecessor()
                         outputString.removeAtIndex(iterator.successor())
@@ -318,7 +276,7 @@ class CalculatorBrain
         return outputString
     }
 
-    // recursively produces the string that examplifies current equation
+    // recursively produces the string that describes current equation
     private func stackToString(ops: [Op],  precedence : String) -> (resultingString: String?, remainingOps: [Op]) {
         
         if !ops.isEmpty {
@@ -337,7 +295,7 @@ class CalculatorBrain
                 if (variableValues[symbol] != nil){
                     return ( symbol, remainingOps)
                 }else{
-                    return ("m", remainingOps)  // if the var has not been set, as debug
+                    return ("m", remainingOps)  // debug
                 }
                 
             case .UnaryOperation(let symbol, _):
