@@ -10,6 +10,14 @@ import UIKit
 
 class GraphViewController: UIViewController {
 
-
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
+            // this is where portrait specific should be located. IF needs to be modified.... (current workaround seems ok)
+        }
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
+        navigationItem.leftItemsSupplementBackButton = true
+        // thanks http://nshipster.com/uisplitviewcontroller/ !
+    }
 
 }

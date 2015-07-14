@@ -11,7 +11,7 @@
                 <splitViewController storyboardIdentifier="1" id="Xth-SG-IQD" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Wpq-76-nUd" kind="relationship" relationship="masterViewController" id="Blo-g4-tn7"/>
-                        <segue destination="eaV-aG-BvD" kind="relationship" relationship="detailViewController" id="LbB-aJ-D9H"/>
+                        <segue destination="w9q-e8-nNY" kind="relationship" relationship="detailViewController" id="rvE-jE-PM7"/>
                     </connections>
                 </splitViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Vgq-ze-94Q" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -374,7 +374,7 @@
                                 </state>
                                 <connections>
                                     <action selector="graph:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ffa-J3-7oo"/>
-                                    <segue destination="eaV-aG-BvD" kind="showDetail" identifier="Show Graph" id="cDO-iw-Rmk"/>
+                                    <segue destination="w9q-e8-nNY" kind="showDetail" identifier="Show Graph" id="cDO-iw-Rmk"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -747,10 +747,11 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
+                    <navigationItem key="navigationItem" id="2LG-Fn-hj4"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggq-Lp-tcz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2074" y="1084"/>
+            <point key="canvasLocation" x="2812" y="1140"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kui-4e-Osy">
@@ -773,8 +774,26 @@
             </objects>
             <point key="canvasLocation" x="1294" y="202"/>
         </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="5Pr-pZ-dHf">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="w9q-e8-nNY" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="AB7-vz-mZm">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="eaV-aG-BvD" kind="relationship" relationship="rootViewController" id="RGB-Dh-40H"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Med-Ih-cI0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1628" y="1162"/>
+        </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cDO-iw-Rmk"/>
+        <segue reference="rvE-jE-PM7"/>
     </inferredMetricsTieBreakers>
 </document>
