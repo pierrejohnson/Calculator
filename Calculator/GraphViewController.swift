@@ -19,5 +19,22 @@ class GraphViewController: UIViewController {
         navigationItem.leftItemsSupplementBackButton = true
         // thanks http://nshipster.com/uisplitviewcontroller/ !
     }
+    
+    
+    
+    // now in the controller
+    // what do we want to draw? check the happiness app
+    // the view was instanciated in Storyboard and then ctrl-dragged in this file...
+    
+    
+    
+    
+    // could add a gesture recognzer here but that is for later?? property observers? 
+    
+    // how we update the UI
+    private func updateUI(){
 
+    }
+    
+    
 }
