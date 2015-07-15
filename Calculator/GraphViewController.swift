@@ -16,24 +16,22 @@ class GraphViewController: UIViewController {
             // this is where portrait specific should be located. IF needs to be modified.... (current workaround seems ok)
         }
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
-        navigationItem.leftItemsSupplementBackButton = true
-        // thanks http://nshipster.com/uisplitviewcontroller/ !
+        navigationItem.leftItemsSupplementBackButton = true   // thanks http://nshipster.com/uisplitviewcontroller/ !
     }
     
     
-    
-    // now in the controller
-    // what do we want to draw? check the happiness app
-    // the view was instanciated in Storyboard and then ctrl-dragged in this file...
-    
-    
-    
+    @IBOutlet weak var graphView: GraphView! {
+        didSet{
+            updateUI()
+        }
+    }
+  
     
     // could add a gesture recognzer here but that is for later?? property observers? 
     
     // how we update the UI
     private func updateUI(){
-
+        graphView.setNeedsDisplay()
     }
     
     

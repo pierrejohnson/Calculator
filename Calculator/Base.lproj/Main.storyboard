@@ -869,18 +869,27 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="AdD-ms-NLu" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
+                            <view contentMode="redraw" translatesAutoresizingMaskIntoConstraints="NO" id="AdD-ms-NLu" customClass="GraphView" customModule="Calculator" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="AdD-ms-NLu" firstAttribute="top" secondItem="101-1P-uFX" secondAttribute="top" id="Cwn-4S-YLP"/>
+                            <constraint firstAttribute="trailing" secondItem="AdD-ms-NLu" secondAttribute="trailing" id="Hkn-NC-cPd"/>
+                            <constraint firstItem="AdD-ms-NLu" firstAttribute="bottom" secondItem="Kwn-y3-p39" secondAttribute="top" id="Pa6-I3-FXI"/>
+                            <constraint firstItem="AdD-ms-NLu" firstAttribute="leading" secondItem="101-1P-uFX" secondAttribute="leading" id="u0k-PE-tZj"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="2LG-Fn-hj4"/>
+                    <connections>
+                        <outlet property="graphView" destination="AdD-ms-NLu" id="fW2-1r-bED"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggq-Lp-tcz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2354" y="1162"/>
+            <point key="canvasLocation" x="2038" y="1090"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kui-4e-Osy">
@@ -919,7 +928,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Med-Ih-cI0" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1628" y="1162"/>
+            <point key="canvasLocation" x="1252" y="1090"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>

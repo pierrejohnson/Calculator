@@ -17,21 +17,18 @@ class GraphView: UIView {
     var color : UIColor = UIColor.blueColor() { didSet { setNeedsDisplay() }}
 
 
-    
-    // what are our locations?
-    
-    // CALCULATED center of the screen: CGPoint { get { return convertPoint(center, fromView: superview)} }
-    var screenCenter: CGPoint { get { return convertPoint( center, fromView: superview)} }
-    
-    
-    
+    var screenCenter: CGPoint {
+        get {
+            return convertPoint(center, fromView: superview) // converts the center
+        }
+    }
+
     
     
     override func drawRect(rect: CGRect)
     {
 
-        let myRect = CGRectMake(screenCenter.x, screenCenter.y, CGFloat(50),CGFloat(50))
-
+        let myRect = CGRectMake(screenCenter.x, screenCenter.y, CGFloat(10),CGFloat(10)) // temp to mess with layout
         let myGraph = UIBezierPath(rect: myRect)
         
         myGraph.lineWidth = lineWidth
