@@ -8,8 +8,9 @@
 
 import UIKit
 
-class GraphViewController: UIViewController {
+class GraphViewController: UIViewController, GraphViewDataSource {
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
@@ -22,17 +23,58 @@ class GraphViewController: UIViewController {
     
     @IBOutlet weak var graphView: GraphView! {
         didSet{
+            graphView.dataSource = self
+
+            // we add the gesture recognizer after the outlet has been set
+            graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView, action: "scale:"))
+            graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView, action: "pan:"))
+            //graphView.addGestureRecognizer(UITapGestureRecognizer(target: graphView, action: "doubleTap:"))
             updateUI()
         }
     }
   
+    // axes origin is originally set to zero - it gets modified via the delegate & forces a redraw every time
+    var axesOrigin : CGPoint = CGPointZero {
+        didSet{
+            updateUI()
+        }
+    }
+
     
-    // could add a gesture recognzer here but that is for later?? property observers? 
+
+    
+
     
     // how we update the UI
     private func updateUI(){
         graphView.setNeedsDisplay()
     }
+    
+    
+    
+    // The delegate function - if graph has been offset / moved, it forces a redraw.
+    func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint? {
+        
+        if newPoint != CGPointZero {
+            // essentially, we now have a NEW origin
+            if newPoint != axesOrigin {
+                axesOrigin = newPoint
+            }
+            return axesOrigin
+        } else {
+            if axesOrigin != CGPointZero {
+                return axesOrigin
+                
+            } else {
+                println ("NIL")
+                return nil
+            }
+
+        }
+
+    }
+    
+    
     
     
 }

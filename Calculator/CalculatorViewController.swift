@@ -94,7 +94,6 @@ class CalculatorViewController: UIViewController
                 let tresult = brain.pushOperand(displayValue!)
                 displayValue = Double(tresult.result!)
                 pastEqns.text! +=  " [\(display.text!)]"
-                
             }
             eqDescription.text = brain.describeEqn() // updates eqDisplay Label
             
