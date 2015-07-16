@@ -62,7 +62,7 @@ class GraphView: UIView {
         myAxes.drawAxesInRect(frame, origin: graphOrigin, pointsPerUnit: myScale) // pointsPerUnit allows for granularity/scale (Bigger = zoom)
     }
 
-    //scale handler
+    // GESTURE: scale handler
     func scale (gesture: UIPinchGestureRecognizer){
         if gesture.state == .Changed{
             myScale *= gesture.scale
@@ -70,34 +70,17 @@ class GraphView: UIView {
         }
     }
     
-    
-    
-    
-    
-    
-    // pan handler
+    // GESTURE: pan handler
     func pan (gesture: UIPanGestureRecognizer){
-        
-        // do we want the CENTER of the screen to be the affected transform? 
-        // does it even make a diff?
-       var newOffset: CGPoint = screenCenter
+  
         switch gesture.state{
         case .Ended: fallthrough
         case .Changed:
             let translation = gesture.translationInView(self)
-            
-            newOffset.x += translation.x
-            newOffset.y += translation.y
             if translation != CGPointZero{
-                dataSource?.originForGraphView(self, newPoint: newOffset)
+                dataSource?.originForGraphView(self, newPoint: translation)
             }
-            // if the next line is active it keeps trying to redraw itself to center... Unsure why.
-            // seems like newOffset is reset to screenCenter before we have had a chance to redraw
-            // and because the SLIGHT translation & Slight diff value we toggle between center & ONE changed location...
-            // it's late, it's mostly working, I'm going to nap.
-            
-            // gesture.setTranslation(CGPointZero, inView: self)
-        
+             gesture.setTranslation(CGPointZero, inView: self) // we need this so that the gesture RESETS itself as it keeps updating the axesCenter via delegate
         default:
             break
         }

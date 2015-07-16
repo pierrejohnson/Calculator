@@ -54,26 +54,13 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     
     // The delegate function - if graph has been offset / moved, it forces a redraw.
     func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint? {
-        
-        if newPoint != CGPointZero {
-            // essentially, we now have a NEW origin
-            if newPoint != axesOrigin {
-                axesOrigin = newPoint
-            }
-            return axesOrigin
-        } else {
-            if axesOrigin != CGPointZero {
-                return axesOrigin
-                
-            } else {
-                println ("NIL")
-                return nil
-            }
-
+        if axesOrigin == CGPointZero{
+            axesOrigin = graphView.screenCenter
         }
-
+        axesOrigin.x += newPoint.x
+        axesOrigin.y += newPoint.y
+        return axesOrigin
     }
-    
     
     
     
