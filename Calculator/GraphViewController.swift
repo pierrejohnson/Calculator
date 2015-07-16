@@ -28,7 +28,11 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             // we add the gesture recognizer after the outlet has been set
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView, action: "scale:"))
             graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView, action: "pan:"))
-            //graphView.addGestureRecognizer(UITapGestureRecognizer(target: graphView, action: "doubleTap:"))
+            
+            let myDoubleTap = UITapGestureRecognizer(target: graphView, action: "doubleTap:")
+            myDoubleTap.numberOfTapsRequired = 2
+            graphView.addGestureRecognizer(myDoubleTap)
+            
             updateUI()
         }
     }
@@ -54,6 +58,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     
     // The delegate function - if graph has been offset / moved, it forces a redraw.
     func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint? {
+       
         if axesOrigin == CGPointZero{
             axesOrigin = graphView.screenCenter
         }

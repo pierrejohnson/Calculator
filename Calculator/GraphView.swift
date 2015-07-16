@@ -62,7 +62,7 @@ class GraphView: UIView {
         myAxes.drawAxesInRect(frame, origin: graphOrigin, pointsPerUnit: myScale) // pointsPerUnit allows for granularity/scale (Bigger = zoom)
     }
 
-    // GESTURE: scale handler
+    // GESTURE: scale handler - scales graph as pinched
     func scale (gesture: UIPinchGestureRecognizer){
         if gesture.state == .Changed{
             myScale *= gesture.scale
@@ -70,7 +70,7 @@ class GraphView: UIView {
         }
     }
     
-    // GESTURE: pan handler
+    // GESTURE: pan handler - moves the graph as panned
     func pan (gesture: UIPanGestureRecognizer){
   
         switch gesture.state{
@@ -85,6 +85,14 @@ class GraphView: UIView {
             break
         }
 
+    }
+    // GESTURE: doubleTap handler - centers the display on doubletap location
+    func doubleTap (gesture: UITapGestureRecognizer){
+        var translation = screenCenter
+        translation.x = screenCenter.x - gesture.locationInView(self).x
+        translation.y = screenCenter.y - gesture.locationInView(self).y
+        dataSource?.originForGraphView(self, newPoint: translation)
+        setNeedsDisplay()
     }
     
 }
