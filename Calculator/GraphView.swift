@@ -62,6 +62,24 @@ class GraphView: UIView {
         myAxes.drawAxesInRect(frame, origin: graphOrigin, pointsPerUnit: myScale) // pointsPerUnit allows for granularity/scale (Bigger = zoom)
     }
 
+    
+    
+    func drawFNInRect(bounds: CGRect, origin: CGPoint, pointsPerUnit: CGFloat)
+    {
+        CGContextSaveGState(UIGraphicsGetCurrentContext())
+        color.set()
+        let path = UIBezierPath()
+        //path.moveToPoint(CGPoint(x: 0, y: yForX(x)/* this is where we get the fn value - likely by calling out a delegate function existing in CalcController?*/))
+        // iterate over every pixel over the view's width
+        //  draw a line from point to point (or make a new point if the last one was not valid)
+        path.stroke()
+       // drawHashmarksInRect(bounds, origin: origin, pointsPerUnit: abs(pointsPerUnit))
+        CGContextRestoreGState(UIGraphicsGetCurrentContext())
+    }
+
+    
+    
+    
     // GESTURE: scale handler - scales graph as pinched
     func scale (gesture: UIPinchGestureRecognizer){
         if gesture.state == .Changed{
@@ -86,6 +104,7 @@ class GraphView: UIView {
         }
 
     }
+    
     // GESTURE: doubleTap handler - centers the display on doubletap location
     func doubleTap (gesture: UITapGestureRecognizer){
         var translation = screenCenter

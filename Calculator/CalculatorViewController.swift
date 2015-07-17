@@ -141,8 +141,7 @@ class CalculatorViewController: UIViewController
     
 
     @IBAction func undo(sender: UIButton) {
-        
-        // this button should combine both clr and undo:
+        // this button combines both clr and undo:
         // if USER IS IN THE MIDDLE OF TYPING: (then we just "←" for them)
         //     else
         // UNDO the last thing that was done
@@ -161,8 +160,6 @@ class CalculatorViewController: UIViewController
         switch operation{
             
             case "±":
-                
-                
                 // if the user was not in the middle of typing, we should clear the screen
                 if !userIsInTheMiddleOfTypingSomething{
                     display.text! = " "
