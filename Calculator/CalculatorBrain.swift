@@ -11,7 +11,6 @@ import Foundation                                       // note that there are n
 
 class CalculatorBrain
 {
-    
     // Swift has a cool feature where you can associate data with types/classes
     // TYPES are FUNCTIONS IN SWIFT
     private enum Op : Printable                         // the "Printable" is a PROTOCOL that enables the description
@@ -87,14 +86,17 @@ class CalculatorBrain
     }
 
     
-    typealias PropertyList = AnyObject // this is to properly document stuff
+    typealias PropertyList = AnyObject // to better document
     
-    var program : PropertyList {
+    var program : PropertyList { // this can be entered into NSuserdefaults
         
         get {
-            return opStack.map { $0.description }
+            return opStack.map { $0.description } // maps the entire stack into an array of strings / descriptions - and that is the GETTER - we return an array of STRING
         }
         set {
+            // the setting depends on wethere we can set the entire array to  an array of Strings. 
+            // if we can, we create a temp array of Op
+            // (if symbol exists in our Op library, we load the matching Op into the new stack / else we load the number).
             if let opSymbols = newValue as? Array<String> {
                 var newOpStack = [Op]()
                 for opSymbol in opSymbols {
@@ -107,11 +109,10 @@ class CalculatorBrain
                 opStack = newOpStack
             }
         }
-        
-        
-        
-        
-    }
+    } // end program
+    
+    //NSUserdefault
+    
     
     
     private func evaluate(ops :[Op]) -> (result: Double?, remainingOps: [Op]) {

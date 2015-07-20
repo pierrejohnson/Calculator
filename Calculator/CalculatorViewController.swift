@@ -35,6 +35,14 @@ class CalculatorViewController: UIViewController
     // this is the action that will make us graph whatever function of m we are trying to graph
     @IBAction func graph(sender: UIButton) {
         println("Pressed Graph")
+        // from there we try to pass some details to the outlet 
+        // we first need to establish that outlet
+        // but it seems the outlet can only be set from the associated controller....
+        // interestingly we do not have a "CalculatorView" - only the controller.
+        // is that because most of the view is built from the StoryBoard?
+        // maybe we aren't really an outlet but the matching part to the other controller.
+        
+       
     }
     
     

@@ -21,10 +21,18 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     }
     
     
+   override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        // if we had a geometry change, reset the center
+        axesOrigin = CGPointZero
+    }
+    
+    
+    
+    
     @IBOutlet weak var graphView: GraphView! {
         didSet{
             graphView.dataSource = self
-
             // we add the gesture recognizer after the outlet has been set
             graphView.addGestureRecognizer(UIPinchGestureRecognizer(target: graphView, action: "scale:"))
             graphView.addGestureRecognizer(UIPanGestureRecognizer(target: graphView, action: "pan:"))
@@ -32,9 +40,9 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             let myDoubleTap = UITapGestureRecognizer(target: graphView, action: "doubleTap:")
             myDoubleTap.numberOfTapsRequired = 2
             graphView.addGestureRecognizer(myDoubleTap)
-            
             updateUI()
         }
+
     }
   
     // axes origin is originally set to zero - it gets modified via the delegate & forces a redraw every time
@@ -67,6 +75,12 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         return axesOrigin
     }
     
+    
+    func functionToBeGraphed(sender: GraphView) -> String? {
+            // maybe it could return the arguments currently set in the OpStack.... but we still need to access the opstack
+        
+        return nil
+    }
     
     
 }

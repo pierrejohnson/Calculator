@@ -855,7 +855,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2084" y="194"/>
+            <point key="canvasLocation" x="2078" y="202"/>
         </scene>
         <!--Graph View Controller-->
         <scene sceneID="7As-at-KSs">
@@ -894,7 +894,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ggq-Lp-tcz" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2038" y="1090"/>
+            <point key="canvasLocation" x="2016" y="1090"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="kui-4e-Osy">
@@ -937,6 +937,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="rvE-jE-PM7"/>
+        <segue reference="cDO-iw-Rmk"/>
     </inferredMetricsTieBreakers>
 </document>
