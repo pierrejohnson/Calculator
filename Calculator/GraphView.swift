@@ -13,12 +13,14 @@ import UIKit
 protocol GraphViewDataSource : class {
     // the only purpose is to get the data - so we call it DataSource
     func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint?
-    // func is passing itself around - so we have a reference
-    func functionToBeGraphed (sender: GraphView) -> String? // polls the current graph
 }
 
 
-
+// we need to be able to defer to what calculates our values
+protocol CalculatorViewDataSource: class {
+    // func is passing itself around - so we have a reference
+    func calculateYForXEquals(sender: CalculatorViewController, currentX: CGFloat) ->CGFloat?
+}
 
 
 @IBDesignable
@@ -33,11 +35,12 @@ class GraphView: UIView {
             return convertPoint(center, fromView: superview) // converts the center
         }
     }
+   
     
 
     // we use "weak" to make sure that the datasource pointer will not be used to keep it in memory (so the REF to itself in the controller implementation does not force it in memory)
     weak var dataSource : GraphViewDataSource? // PROTOCOL
-    
+    weak var calculatorViewDataSource: CalculatorViewDataSource?
 
     
     override func drawRect(rect: CGRect)
@@ -80,9 +83,12 @@ class GraphView: UIView {
             var calcX =  widthDelta - origin.x
        
             var calcY = 0 // the value we want to calculate depending on the function
-           // the ratio of the width to the current center of the graph
             
-            println("calcY: \(calcY) calcY: \(calcX) widthDelta = \(widthDelta) - myScale: \(myScale)")
+            // what we want to return to this view is the result of "evaluate" for calcX value of M.
+            // i.e. we have to set a delegate that will be called in the same way as dataSoure
+            
+            
+           // println("calcY: \(calcY) calcY: \(calcX) widthDelta = \(widthDelta) - myScale: \(myScale)")
             
             
             // calculate the function of X 
@@ -94,7 +100,7 @@ class GraphView: UIView {
         myFunctionPath.stroke()
         color = UIColor.darkGrayColor()
         color.set()
-        
+
     }
     
     

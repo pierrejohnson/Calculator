@@ -8,11 +8,35 @@
 
 import UIKit
 
-class CalculatorViewController: UIViewController
+class CalculatorViewController: UIViewController, CalculatorViewDataSource
 {
-    @IBOutlet weak var display: UILabel! // (P) '!' == "implicitely unwrapped optional"
+    
+    
+    
+
+    
+    
+    @IBOutlet weak var display: UILabel!
+    
+    
+    
+    // (P) '!' == "implicitely unwrapped optional"
     @IBOutlet weak var pastEqns: UILabel! // (P) eqns and past input
     @IBOutlet weak var eqDescription: UILabel! // (P) where we show the current equation
+    
+//    // faking it
+//    var graphViewController: GraphViewController?
+//
+//    
+//    private func setupSplitViewController() {
+//        // set the masterview
+//        let masterNavigationController: AnyObject? = splitViewController?.viewControllers.first
+//        // set the graphViewController item to the top view Controller (to the detail)
+//        graphViewController = masterNavigationController!.topViewController as? GraphViewController
+//        // set the delegate to the current view "as"
+//        graphViewController!.graphView.calculatorViewDataSource = self
+//    }
+//    
     
     var userIsInTheMiddleOfTypingSomething = false
     var brain = CalculatorBrain()
@@ -41,8 +65,8 @@ class CalculatorViewController: UIViewController
         // interestingly we do not have a "CalculatorView" - only the controller.
         // is that because most of the view is built from the StoryBoard?
         // maybe we aren't really an outlet but the matching part to the other controller.
-        
-       
+        //setupSplitViewController() // trying to set delegates
+
     }
     
     
@@ -64,10 +88,8 @@ class CalculatorViewController: UIViewController
     var displayValue : Double? {
         get {
                 return NSNumberFormatter().numberFromString(display.text!)?.doubleValue
-
         }
         set {
-            
             if (newValue != nil){
                 display.text = "\(newValue!)" // converts a value to a string
                 userIsInTheMiddleOfTypingSomething = false
@@ -93,7 +115,14 @@ class CalculatorViewController: UIViewController
     
     
     
+    func calculateYForXEquals(sender: CalculatorViewController, currentX: CGFloat) ->CGFloat? {
+        
+        return nil
+    }
     
+    
+    
+ 
     
     @IBAction func enter() {
         if userIsInTheMiddleOfTypingSomething == true { // prevents passing nil and crashing.
@@ -114,19 +143,6 @@ class CalculatorViewController: UIViewController
         }
     }
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
     @IBAction func storeM(sender: UIButton) {
         brain.variableValues["M"] = displayValue    // we store the value
         display.text = "Stored!" // would like to havethis fade off for .3s.
@@ -134,7 +150,6 @@ class CalculatorViewController: UIViewController
         pastEqns.text! +=  " [->M]"                 // for debug
         userIsInTheMiddleOfTypingSomething = false
     }
-    
     
     @IBAction func recallM(sender: UIButton) {
         displayValue = brain.variableValues["M"]
@@ -146,8 +161,6 @@ class CalculatorViewController: UIViewController
         }
     }
     
-    
-
     @IBAction func undo(sender: UIButton) {
         // this button combines both clr and undo:
         // if USER IS IN THE MIDDLE OF TYPING: (then we just "←" for them)

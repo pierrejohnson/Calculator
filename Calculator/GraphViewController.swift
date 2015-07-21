@@ -10,24 +10,23 @@ import UIKit
 
 class GraphViewController: UIViewController, GraphViewDataSource {
 
+    var axesOrigin : CGPoint = CGPointZero {
+        didSet{
+            updateUI()
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        if (UIInterfaceOrientationIsPortrait(self.interfaceOrientation)) {
-            // this is where portrait specific should be located. IF needs to be modified.... (current workaround seems ok)
-        }
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
         navigationItem.leftItemsSupplementBackButton = true   // thanks http://nshipster.com/uisplitviewcontroller/ !
     }
     
     
-   override func viewWillLayoutSubviews() {
+    override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        // if we had a geometry change, reset the center
-        axesOrigin = CGPointZero
+        axesOrigin = CGPointZero // if we have a geometry change, reset the center
     }
-    
-    
     
     
     @IBOutlet weak var graphView: GraphView! {
@@ -45,16 +44,6 @@ class GraphViewController: UIViewController, GraphViewDataSource {
 
     }
   
-    // axes origin is originally set to zero - it gets modified via the delegate & forces a redraw every time
-    var axesOrigin : CGPoint = CGPointZero {
-        didSet{
-            updateUI()
-        }
-    }
-
-    
-
-    
 
     
     // how we update the UI
