@@ -12,31 +12,38 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
 {
     
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        println("[C]CalcViewController: \(self)")
+        println("[C]self.splitViewController: \(self.splitViewController)")
+        println("[C]self.splitViewController.viewControllers: \(self.splitViewController?.viewControllers)")
+        println("[C]self.splitViewController.viewControllers.count: \(self.splitViewController?.viewControllers.count)")
+        //graphView.calcDataSource = splitViewController?.viewControllers.first as CalculatorViewController
+    }
     
-
+    
+    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+       if (segue.identifier == "Show Graph") {
+            //"pass data" to the next view?
+            println("in prepareForSegue")
+        }
+        println("segue: \(segue.identifier)")
+    }
+    
+    
+    // PROTOCOL IMPLEMENTATION
+    func calculateYForXEquals(sender: GraphView, currentX: CGFloat) ->CGFloat? {
+        println(" func calculateYForXEquals()")
+        return nil
+    }
+    
     
     
     @IBOutlet weak var display: UILabel!
-    
-    
-    
     // (P) '!' == "implicitely unwrapped optional"
     @IBOutlet weak var pastEqns: UILabel! // (P) eqns and past input
     @IBOutlet weak var eqDescription: UILabel! // (P) where we show the current equation
     
-//    // faking it
-//    var graphViewController: GraphViewController?
-//
-//    
-//    private func setupSplitViewController() {
-//        // set the masterview
-//        let masterNavigationController: AnyObject? = splitViewController?.viewControllers.first
-//        // set the graphViewController item to the top view Controller (to the detail)
-//        graphViewController = masterNavigationController!.topViewController as? GraphViewController
-//        // set the delegate to the current view "as"
-//        graphViewController!.graphView.calculatorViewDataSource = self
-//    }
-//    
     
     var userIsInTheMiddleOfTypingSomething = false
     var brain = CalculatorBrain()
@@ -55,7 +62,6 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     }
 
     
-    
     // this is the action that will make us graph whatever function of m we are trying to graph
     @IBAction func graph(sender: UIButton) {
         println("Pressed Graph")
@@ -65,13 +71,9 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
         // interestingly we do not have a "CalculatorView" - only the controller.
         // is that because most of the view is built from the StoryBoard?
         // maybe we aren't really an outlet but the matching part to the other controller.
-        //setupSplitViewController() // trying to set delegates
-
     }
     
-    
-    
-    
+
     
     @IBAction func deleteDigit(sender: UIButton) {
         if userIsInTheMiddleOfTypingSomething {
@@ -115,11 +117,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     
     
     
-    func calculateYForXEquals(sender: CalculatorViewController, currentX: CGFloat) ->CGFloat? {
-        
-        return nil
-    }
-    
+
     
     
  

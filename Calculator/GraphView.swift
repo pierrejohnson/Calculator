@@ -15,11 +15,10 @@ protocol GraphViewDataSource : class {
     func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint?
 }
 
-
 // we need to be able to defer to what calculates our values
 protocol CalculatorViewDataSource: class {
     // func is passing itself around - so we have a reference
-    func calculateYForXEquals(sender: CalculatorViewController, currentX: CGFloat) ->CGFloat?
+    func calculateYForXEquals (sender: GraphView, currentX: CGFloat) ->CGFloat?
 }
 
 
@@ -40,7 +39,7 @@ class GraphView: UIView {
 
     // we use "weak" to make sure that the datasource pointer will not be used to keep it in memory (so the REF to itself in the controller implementation does not force it in memory)
     weak var dataSource : GraphViewDataSource? // PROTOCOL
-    weak var calculatorViewDataSource: CalculatorViewDataSource?
+    weak var calcDataSource: CalculatorViewDataSource?
 
     
     override func drawRect(rect: CGRect)
@@ -100,7 +99,7 @@ class GraphView: UIView {
         myFunctionPath.stroke()
         color = UIColor.darkGrayColor()
         color.set()
-
+       var test =  calcDataSource?.calculateYForXEquals(self, currentX: CGFloat(0))
     }
     
     

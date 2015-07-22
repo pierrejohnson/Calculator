@@ -2,4 +2,94 @@
 <Bucket
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Calculator/GraphView.swift"
+            timestampString = "459198115.21823"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "26"
+            endingLineNumber = "26"
+            landmarkName = "GraphView"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Calculator.GraphView.lineWidth.didset : CoreGraphics.CGFloat"
+                  moduleName = "Calculator"
+                  urlString = "file:///Users/AmenophisIII/Desktop/STANFORD/Projects/Calculator/Calculator/GraphView.swift"
+                  timestampString = "459198115.237121"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "29">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Calculator.GraphView.lineWidth.materializeForSet : CoreGraphics.CGFloat"
+                  moduleName = "Calculator"
+                  urlString = "file:///Users/AmenophisIII/Desktop/STANFORD/Projects/Calculator/Calculator/GraphView.swift"
+                  timestampString = "459198115.237332"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "0"
+                  endingLineNumber = "0"
+                  offsetFromSymbolStart = "25">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Calculator.GraphView.init (Calculator.GraphView.Type)(frame : C.CGRect) -&gt; Calculator.GraphView"
+                  moduleName = "Calculator"
+                  urlString = "file:///Users/AmenophisIII/Desktop/STANFORD/Projects/Calculator/Calculator/GraphView.swift"
+                  timestampString = "459198115.237478"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "73">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Calculator.GraphView.init (Calculator.GraphView.Type)() -&gt; Calculator.GraphView"
+                  moduleName = "Calculator"
+                  urlString = "file:///Users/AmenophisIII/Desktop/STANFORD/Projects/Calculator/Calculator/GraphView.swift"
+                  timestampString = "459198115.237621"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "30">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Calculator.GraphView.init (Calculator.GraphView.Type)(coder : ObjectiveC.NSCoder) -&gt; Calculator.GraphView"
+                  moduleName = "Calculator"
+                  urlString = "file:///Users/AmenophisIII/Desktop/STANFORD/Projects/Calculator/Calculator/GraphView.swift"
+                  timestampString = "459198115.237763"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "28"
+                  endingLineNumber = "28"
+                  offsetFromSymbolStart = "36">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

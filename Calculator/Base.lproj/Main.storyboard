@@ -5,10 +5,10 @@
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--Split View Controller-->
+        <!--Global Split View Controller-->
         <scene sceneID="NXw-ZS-TtA">
             <objects>
-                <splitViewController storyboardIdentifier="1" id="Xth-SG-IQD" sceneMemberID="viewController">
+                <splitViewController storyboardIdentifier="1" id="Xth-SG-IQD" customClass="GlobalSplitViewController" customModule="Calculator" customModuleProvider="target" sceneMemberID="viewController">
                     <connections>
                         <segue destination="Wpq-76-nUd" kind="relationship" relationship="masterViewController" id="Blo-g4-tn7"/>
                         <segue destination="w9q-e8-nNY" kind="relationship" relationship="detailViewController" id="rvE-jE-PM7"/>
@@ -937,6 +937,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="cDO-iw-Rmk"/>
+        <segue reference="rvE-jE-PM7"/>
     </inferredMetricsTieBreakers>
 </document>
