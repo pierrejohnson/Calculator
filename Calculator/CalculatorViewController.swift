@@ -14,26 +14,42 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        println("[C]CalcViewController: \(self)")
-        println("[C]self.splitViewController: \(self.splitViewController)")
-        println("[C]self.splitViewController.viewControllers: \(self.splitViewController?.viewControllers)")
-        println("[C]self.splitViewController.viewControllers.count: \(self.splitViewController?.viewControllers.count)")
-        //graphView.calcDataSource = splitViewController?.viewControllers.first as CalculatorViewController
+        println("[C]viewDidLoad")
+
     }
     
     
-    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-       if (segue.identifier == "Show Graph") {
-            //"pass data" to the next view?
-            println("in prepareForSegue")
+    override func prepareForSegue(segue: UIStoryboardSegue?, sender: AnyObject!) {
+        println("segue: \(segue!.identifier)")
+        if (segue!.identifier == "Show Graph") {
+            var yourNextViewController = (segue!.destinationViewController as UINavigationController)
+            var detail = yourNextViewController.viewControllers[0] as GraphViewController
+            var tempview = detail.view // FORCES THE VIEW object into existence, without this it will compile, but next line will crash at runtime (graphView nil)
+            detail.graphView.calcDataSource = self
         }
-        println("segue: \(segue.identifier)")
     }
     
     
     // PROTOCOL IMPLEMENTATION
     func calculateYForXEquals(sender: GraphView, currentX: CGFloat) ->CGFloat? {
-        println(" func calculateYForXEquals()")
+       
+        var storedM = brain.variableValues["M"]
+        // we want to graph for currentX
+        brain.variableValues["M"] = Double(currentX)
+    
+        var fnResult = brain.evaluateAndReportErrors().result
+        brain.variableValues["M"] = storedM
+        
+        if fnResult != nil
+        {
+            if fnResult!.isNaN || fnResult!.isInfinite {
+                return nil
+            }
+           println("\(fnResult!)")
+           return CGFloat(fnResult!)
+            
+            
+        }
         return nil
     }
     
@@ -41,8 +57,8 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     
     @IBOutlet weak var display: UILabel!
     // (P) '!' == "implicitely unwrapped optional"
-    @IBOutlet weak var pastEqns: UILabel! // (P) eqns and past input
-    @IBOutlet weak var eqDescription: UILabel! // (P) where we show the current equation
+    @IBOutlet weak var pastEqns: UILabel!       // (P) eqns and past input
+    @IBOutlet weak var eqDescription: UILabel!  // (P) where we show the current equation
     
     
     var userIsInTheMiddleOfTypingSomething = false
@@ -50,8 +66,6 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     
     
     @IBAction func appendDigit(sender: UIButton) {
-        // (P)"Optional" : can only be of TWO values: NIL or ("Something")
-        // (P) Note that adding '!' Unwraps the optional
         let digit = sender.currentTitle!
         if userIsInTheMiddleOfTypingSomething {
             display.text = display.text! + digit
@@ -65,12 +79,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     // this is the action that will make us graph whatever function of m we are trying to graph
     @IBAction func graph(sender: UIButton) {
         println("Pressed Graph")
-        // from there we try to pass some details to the outlet 
-        // we first need to establish that outlet
-        // but it seems the outlet can only be set from the associated controller....
-        // interestingly we do not have a "CalculatorView" - only the controller.
-        // is that because most of the view is built from the StoryBoard?
-        // maybe we aren't really an outlet but the matching part to the other controller.
+        // the triggered segue will set the delegate for the detail view.
     }
     
 

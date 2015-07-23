@@ -79,28 +79,22 @@ class GraphView: UIView {
             var origin = dataSource?.originForGraphView(self, newPoint: CGPointZero) ?? screenCenter
             
             // the value of X checked in the graph coordinate system
-            var calcX =  widthDelta - origin.x
+            var calcX =  (widthDelta - origin.x)/myScale
        
-            var calcY = 0 // the value we want to calculate depending on the function
-            
-            // what we want to return to this view is the result of "evaluate" for calcX value of M.
-            // i.e. we have to set a delegate that will be called in the same way as dataSoure
-            
-            
-           // println("calcY: \(calcY) calcY: \(calcX) widthDelta = \(widthDelta) - myScale: \(myScale)")
-            
+            var calcY = calcDataSource?.calculateYForXEquals(self, currentX: calcX) // the value we want to calculate depending on the function
+
+            var transposedY = origin.y + (calcY! * myScale)
             
             // calculate the function of X 
             // scale it down to the UI size / crop if NaN / does not fit
             
-            myFunctionPath.addLineToPoint(CGPoint(x: widthDelta, y: viewHeight/2 ))
+            myFunctionPath.addLineToPoint(CGPoint(x: widthDelta, y: transposedY ))
             widthDelta++
         }
         myFunctionPath.stroke()
         color = UIColor.darkGrayColor()
         color.set()
-       var test =  calcDataSource?.calculateYForXEquals(self, currentX: CGFloat(0))
-    }
+        }
     
     
     
