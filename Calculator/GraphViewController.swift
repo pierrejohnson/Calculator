@@ -8,9 +8,9 @@
 
 import UIKit
 
+
 class GraphViewController: UIViewController, GraphViewDataSource {
 
-    
     var axesOrigin : CGPoint = CGPointZero {
         didSet{
             updateUI()
@@ -21,7 +21,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
         navigationItem.leftItemsSupplementBackButton = true   // thanks http://nshipster.com/uisplitviewcontroller/ !
-        navigationItem.title = "title1"
+        navigationItem.title = "Graph" // this title is loaded in iPad Portrait
         println("[G] ViewDidLoad")
     }
     
@@ -30,7 +30,6 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         super.viewWillLayoutSubviews()
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
         navigationItem.leftItemsSupplementBackButton = true
-        navigationItem.title = functionToBeGraphed(graphView) ?? "nothing"
         axesOrigin = CGPointZero // if we have a geometry change, reset the center
     }
 

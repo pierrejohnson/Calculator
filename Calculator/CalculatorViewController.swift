@@ -26,6 +26,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
             var detail = yourNextViewController.viewControllers[0] as GraphViewController
             var tempview = detail.view // FORCES THE VIEW object into existence, without this it will compile, but next line will crash at runtime (graphView nil)
             detail.graphView.calcDataSource = self
+            detail.title = brain.lastFunction(brain.describeEqn()!) ?? "Descr" // one way to update the title without actually setting a delegate
         }
     }
     

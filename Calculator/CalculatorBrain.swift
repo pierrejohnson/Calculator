@@ -260,6 +260,32 @@ class CalculatorBrain
         return cleanedOutput
     }
     
+    
+    // returns the last "function",  the one being graphed. Needs to be refactored.
+    func lastFunction(theString : String? )-> String? {
+        if theString == nil {
+            return nil
+        }
+        let myString = theString!
+        if myString.isEmpty || myString == " " {
+            return nil
+        }
+
+        var iterator = myString.endIndex.predecessor()
+        if myString[iterator] == "="
+        {
+            iterator = iterator.predecessor().predecessor()
+        }
+        
+        while myString[iterator] != " " && iterator != myString.startIndex
+        {
+            iterator = iterator.predecessor()
+        }
+       let curatedString = myString.substringFromIndex(iterator)
+        return curatedString
+    }
+
+    
     // cleans the output
     private func cleanMyOutput(inputString:String?) -> String {
         if inputString != nil{
