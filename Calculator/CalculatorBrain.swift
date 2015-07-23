@@ -111,10 +111,7 @@ class CalculatorBrain
         }
     } // end program
     
-    //NSUserdefault
-    
-    
-    
+
     private func evaluate(ops :[Op]) -> (result: Double?, remainingOps: [Op]) {
         
         if !ops.isEmpty {
@@ -159,24 +156,23 @@ class CalculatorBrain
         return result
     }
 
+    // stores opStack into NSUserDefaults
     func storeOpStack(){
         println("Storing...")
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject(program, forKey: "myOps")
-       if defaults.synchronize()
-       {
-        println("Syncd!")
-        }
-        
+        defaults.synchronize()
     }
+    
+    // loads NSUserDefaults into opStack
     func retrieveOpStack(){
-        println("Retrieving...")
+        println("Retrieving from NSUserDefaults...")
         let defaults = NSUserDefaults.standardUserDefaults()
-        program = defaults.objectForKey("myOps")! as PropertyList
-        if defaults.synchronize()
+        if let tempProgram : AnyObject = defaults.objectForKey("myOps")
         {
-            println("Syncd!")
+            program = tempProgram as PropertyList
         }
+        defaults.synchronize()
         
     }
     
@@ -185,7 +181,7 @@ class CalculatorBrain
         return (result, error)
     }
 
-    // == evaluate + error string
+    // == "evaluate + error string" if faillure to evaluate.
     private func evaluateAndReportErrors(ops :[Op]) -> (result: Double?, remainingOps: [Op], error: String?) {
         if !ops.isEmpty {
             var remainingOps = ops
@@ -285,22 +281,17 @@ class CalculatorBrain
     }
     
     
-    // returns the last "function",  the one being graphed. Needs to be refactored.
+    // returns the last function of the opStack, the one being graphed. Needs to be refactored.
     func lastFunction(theString : String? )-> String? {
-        if theString == nil {
-            return nil
-        }
+        if theString == nil {return nil}
+        
         let myString = theString!
-        if myString.isEmpty || myString == " " {
-            return nil
-        }
+        if myString.isEmpty || myString == " " {return nil}
 
         var iterator = myString.endIndex.predecessor()
-        if myString[iterator] == "="
-        {
+        if myString[iterator] == "=" {
             iterator = iterator.predecessor().predecessor()
         }
-        
         while myString[iterator] != " " && iterator != myString.startIndex
         {
             iterator = iterator.predecessor()

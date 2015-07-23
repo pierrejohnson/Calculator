@@ -31,8 +31,6 @@ class GraphView: UIView {
     var myScale : CGFloat = 1 {
         didSet {
             setNeedsDisplay()
-            
-            // Save the new Value in
         }
     } // we want the variables to be modifiable by others - Note: Seems Storyboard has priority on this.
     var screenCenter: CGPoint {
@@ -114,25 +112,21 @@ class GraphView: UIView {
     
     
     func storeGraph(){
-        println("Storing Graph Origin/Scale")
         let defaults = NSUserDefaults.standardUserDefaults()
         defaults.setObject(myScale, forKey: "scale") // we store the scale
-       let graphOrigin = dataSource?.originForGraphView(self, newPoint: CGPointZero)
+        let graphOrigin = dataSource?.originForGraphView(self, newPoint: CGPointZero)
         defaults.setObject(graphOrigin?.x , forKey: "xOrigin") // we store the graph origin
-        defaults.setObject(graphOrigin?.y , forKey: "yOrigin") // we store the graph origin
+        defaults.setObject(graphOrigin?.y , forKey: "yOrigin")
         defaults.synchronize()
-        println("Sync'd!")
     }
     
     func retrieveGraph(){
-               let defaults = NSUserDefaults.standardUserDefaults()
+        let defaults = NSUserDefaults.standardUserDefaults()
         if let tempScale = defaults.objectForKey("scale") as? CGFloat
         {
             myScale = tempScale
         }
         
-       // let graphOrigin = CGPointMake(, )
-        // now we need to pass this origin to someone.
         if let tempX = defaults.objectForKey("xOrigin") as? CGFloat {
             if let tempY = defaults.objectForKey("yOrigin") as? CGFloat
             {
@@ -162,7 +156,7 @@ class GraphView: UIView {
             if translation != CGPointZero{
                 dataSource?.originForGraphView(self, newPoint: translation)
             }
-             gesture.setTranslation(CGPointZero, inView: self) // we need this so that the gesture RESETS itself as it keeps updating the axesCenter via delegate
+             gesture.setTranslation(CGPointZero, inView: self) // so the gesture RESETS itself while updating axesCenter via delegate
         default:
             break
         }
@@ -174,8 +168,6 @@ class GraphView: UIView {
         translation.x = screenCenter.x - gesture.locationInView(self).x
         translation.y = screenCenter.y - gesture.locationInView(self).y
         dataSource?.originForGraphView(self, newPoint: translation)
-        // good place to save origin & myScale to NSUserDefaults
-        // storeGraph()
         setNeedsDisplay()
     }
     
