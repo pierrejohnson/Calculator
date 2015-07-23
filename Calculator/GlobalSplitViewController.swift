@@ -12,10 +12,11 @@ class GlobalSplitViewController: UISplitViewController, UISplitViewControllerDel
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         self.delegate = self
     }
     
+    
+    // this function forces the collapse of the Detail, leaving Master on top - I Think.
     func splitViewController(splitViewController: UISplitViewController, collapseSecondaryViewController secondaryViewController: UIViewController!, ontoPrimaryViewController primaryViewController: UIViewController!) -> Bool{
         return true
     }

@@ -10,6 +10,7 @@ import UIKit
 
 class GraphViewController: UIViewController, GraphViewDataSource {
 
+    
     var axesOrigin : CGPoint = CGPointZero {
         didSet{
             updateUI()
@@ -20,18 +21,22 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         super.viewDidLoad()
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
         navigationItem.leftItemsSupplementBackButton = true   // thanks http://nshipster.com/uisplitviewcontroller/ !
+        navigationItem.title = "title1"
         println("[G] ViewDidLoad")
     }
     
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
+        navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
+        navigationItem.leftItemsSupplementBackButton = true
+        navigationItem.title = functionToBeGraphed(graphView) ?? "nothing"
         axesOrigin = CGPointZero // if we have a geometry change, reset the center
     }
-    
-    
+
     @IBOutlet weak var graphView: GraphView! {
         didSet{
+            println("[G] didSet graphView")
             graphView.dataSource = self 
             //graphView.calcDataSource is set in the prepareforsegue from the CalcVC
             // we add the gesture recognizer after the outlet has been set
