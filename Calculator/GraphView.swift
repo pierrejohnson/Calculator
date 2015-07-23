@@ -28,7 +28,13 @@ class GraphView: UIView {
     var lineWidth : CGFloat = 2 { didSet { setNeedsDisplay() }} // we set the default linewidth
     var color : UIColor = UIColor.lightGrayColor() //{ didSet { setNeedsDisplay() }}
     @IBInspectable
-    var myScale : CGFloat = 1 { didSet { setNeedsDisplay() }} // we want the variables to be modifiable by others - Note: Seems Storyboard has priority on this.
+    var myScale : CGFloat = 1 {
+        didSet {
+            setNeedsDisplay()
+            
+            // Save the new Value in
+        }
+    } // we want the variables to be modifiable by others - Note: Seems Storyboard has priority on this.
     var screenCenter: CGPoint {
         get {
             return convertPoint(center, fromView: superview) // converts the center
@@ -50,6 +56,7 @@ class GraphView: UIView {
         let graphOrigin = dataSource?.originForGraphView(self, newPoint: CGPointZero) ?? screenCenter
         myAxes.drawAxesInRect(frame, origin: graphOrigin, pointsPerUnit: myScale) // pointsPerUnit allows for granularity/scale (Bigger = zoom)
         drawMyFunction()
+        storeGraph()
     }
 
     
@@ -106,6 +113,37 @@ class GraphView: UIView {
         }
     
     
+    func storeGraph(){
+        println("Storing Graph Origin/Scale")
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(myScale, forKey: "scale") // we store the scale
+       let graphOrigin = dataSource?.originForGraphView(self, newPoint: CGPointZero)
+        defaults.setObject(graphOrigin?.x , forKey: "xOrigin") // we store the graph origin
+        defaults.setObject(graphOrigin?.y , forKey: "yOrigin") // we store the graph origin
+        defaults.synchronize()
+        println("Sync'd!")
+    }
+    
+    func retrieveGraph(){
+               let defaults = NSUserDefaults.standardUserDefaults()
+        if let tempScale = defaults.objectForKey("scale") as? CGFloat
+        {
+            myScale = tempScale
+        }
+        
+       // let graphOrigin = CGPointMake(, )
+        // now we need to pass this origin to someone.
+        if let tempX = defaults.objectForKey("xOrigin") as? CGFloat {
+            if let tempY = defaults.objectForKey("yOrigin") as? CGFloat
+            {
+                var translation = screenCenter
+                translation.x =  tempX - screenCenter.x
+                translation.y =  tempY - screenCenter.y
+                dataSource?.originForGraphView(self, newPoint: translation)
+            }
+        }
+        setNeedsDisplay()
+    }
     
     // GESTURE: scale handler - scales graph as pinched
     func scale (gesture: UIPinchGestureRecognizer){
@@ -136,6 +174,8 @@ class GraphView: UIView {
         translation.x = screenCenter.x - gesture.locationInView(self).x
         translation.y = screenCenter.y - gesture.locationInView(self).y
         dataSource?.originForGraphView(self, newPoint: translation)
+        // good place to save origin & myScale to NSUserDefaults
+        // storeGraph()
         setNeedsDisplay()
     }
     

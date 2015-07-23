@@ -15,7 +15,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
     override func viewDidLoad() {
         super.viewDidLoad()
         println("[C]viewDidLoad")
-
+        brain.retrieveOpStack()
     }
     
     
@@ -229,6 +229,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
                         displayResults = brain.evaluateAndReportErrors().error!
                     }
                 }
+                brain.storeOpStack() // so we can clear the stack if emptied.
                 return
         }
     }

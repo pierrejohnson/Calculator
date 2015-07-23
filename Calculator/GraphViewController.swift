@@ -30,7 +30,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
         super.viewWillLayoutSubviews()
         navigationItem.leftBarButtonItem = splitViewController?.displayModeButtonItem()
         navigationItem.leftItemsSupplementBackButton = true
-        axesOrigin = CGPointZero // if we have a geometry change, reset the center
+
     }
 
     @IBOutlet weak var graphView: GraphView! {
@@ -44,6 +44,7 @@ class GraphViewController: UIViewController, GraphViewDataSource {
             let myDoubleTap = UITapGestureRecognizer(target: graphView, action: "doubleTap:")
             myDoubleTap.numberOfTapsRequired = 2
             graphView.addGestureRecognizer(myDoubleTap)
+            graphView.retrieveGraph()
             updateUI()
         }
 
@@ -61,11 +62,17 @@ class GraphViewController: UIViewController, GraphViewDataSource {
     // The delegate function - if graph has been offset / moved, it forces a redraw.
     func originForGraphView (sender: GraphView, newPoint: CGPoint) -> CGPoint? {
        
+        println("originForGraphView:")
         if axesOrigin == CGPointZero{
             axesOrigin = graphView.screenCenter
+            println("originForGraphView: axes Origin set to screenCenter")
         }
+        println("originForGraphView: new Point added: \(newPoint)")
+        
         axesOrigin.x += newPoint.x
         axesOrigin.y += newPoint.y
+        println("originForGraphView: origin: \(axesOrigin)")
+
         return axesOrigin
     }
     

@@ -159,6 +159,27 @@ class CalculatorBrain
         return result
     }
 
+    func storeOpStack(){
+        println("Storing...")
+        let defaults = NSUserDefaults.standardUserDefaults()
+        defaults.setObject(program, forKey: "myOps")
+       if defaults.synchronize()
+       {
+        println("Syncd!")
+        }
+        
+    }
+    func retrieveOpStack(){
+        println("Retrieving...")
+        let defaults = NSUserDefaults.standardUserDefaults()
+        program = defaults.objectForKey("myOps")! as PropertyList
+        if defaults.synchronize()
+        {
+            println("Syncd!")
+        }
+        
+    }
+    
     func evaluateAndReportErrors() -> (result: Double?, error: String?) {
         let (result, remainder, error) = evaluateAndReportErrors(opStack)
         return (result, error)
@@ -205,6 +226,7 @@ class CalculatorBrain
                 return (M_PI, remainingOps, nil)
             case .ClrOperation(let clr):
                 remainingOps.removeAll(keepCapacity: false)
+                storeOpStack()
                 return (nil, remainingOps, nil)
             case .SignOperation(let sign):
                 return (nil, remainingOps, nil)
@@ -215,12 +237,14 @@ class CalculatorBrain
     
     func pushOperand(operand: Double) -> (result: Double?, error: String?) {
         opStack.append(Op.Operand(operand))
+        storeOpStack()
         return evaluateAndReportErrors()
     }
 
     // pushes a variable onto our stack then returns evaluate()
     func pushOperand(symbol : String) -> (result: Double?, error: String?) {
         opStack.append(Op.Variable(symbol))
+        storeOpStack()
         return evaluateAndReportErrors()
     }
 
