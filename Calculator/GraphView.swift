@@ -28,7 +28,7 @@ class GraphView: UIView {
     var lineWidth : CGFloat = 2 { didSet { setNeedsDisplay() }} // we set the default linewidth
     var color : UIColor = UIColor.lightGrayColor() //{ didSet { setNeedsDisplay() }}
     @IBInspectable
-    var myScale : CGFloat = 10 { didSet { setNeedsDisplay() }} // we want the variables to be modifiable by others.
+    var myScale : CGFloat = 1 { didSet { setNeedsDisplay() }} // we want the variables to be modifiable by others - Note: Seems Storyboard has priority on this.
     var screenCenter: CGPoint {
         get {
             return convertPoint(center, fromView: superview) // converts the center
@@ -44,12 +44,8 @@ class GraphView: UIView {
     
     override func drawRect(rect: CGRect)
     {
-        let myRect = CGRectMake(screenCenter.x-80, screenCenter.y-80, CGFloat(160),CGFloat(160)) // temp to mess with layout
         let myAxes = AxesDrawer(color: UIColor.blueColor())
-        let myGraph = UIBezierPath(rect: myRect)
-        myGraph.lineWidth = lineWidth
-        color.set()                     // we set the color [ includes fill and stroke
-        myGraph.stroke()                // we DRAW / stroke the face
+        color.set()                     // we set the color
         // this call returns the offset origin  - or the screenCenter
         let graphOrigin = dataSource?.originForGraphView(self, newPoint: CGPointZero) ?? screenCenter
         myAxes.drawAxesInRect(frame, origin: graphOrigin, pointsPerUnit: myScale) // pointsPerUnit allows for granularity/scale (Bigger = zoom)
@@ -70,25 +66,38 @@ class GraphView: UIView {
         // (2) establish the number of pixels in the frame
         let viewHeight = self.bounds.height
         var widthDelta : CGFloat = 0
+        var origin = dataSource?.originForGraphView(self, newPoint: CGPointZero) ?? screenCenter         // our axes origin
+        var currentlyDrawing = false
+        // creating the original point
         
-        myFunctionPath.moveToPoint(CGPoint(x:widthDelta,y:viewHeight/2) )
+        
         while widthDelta <= viewWidth
         {
-            
-            // our axes origin
-            var origin = dataSource?.originForGraphView(self, newPoint: CGPointZero) ?? screenCenter
-            
-            // the value of X checked in the graph coordinate system
             var calcX =  (widthDelta - origin.x)/myScale
-       
-            var calcY = calcDataSource?.calculateYForXEquals(self, currentX: calcX) // the value we want to calculate depending on the function
+            var calcY = calcDataSource?.calculateYForXEquals(self, currentX: calcX) // the value we want to calculate 
 
-            var transposedY = origin.y + (calcY! * myScale)
             
-            // calculate the function of X 
-            // scale it down to the UI size / crop if NaN / does not fit
+            if calcY != nil {
+                var transposedY = origin.y - (calcY! * myScale)
+                // stop drawing if we are out of frame
+                if transposedY < CGFloat(0) || transposedY >  viewHeight { currentlyDrawing = false }
+                
+
+                if currentlyDrawing && !calcY!.isInfinite && currentlyDrawing{
+                    myFunctionPath.addLineToPoint(CGPoint(x: widthDelta, y: transposedY ))
+                    
+                } else {
+                    myFunctionPath.moveToPoint(CGPoint(x:widthDelta,y: transposedY) )
+                    currentlyDrawing = true
+                }
+            } else {
+                currentlyDrawing = false
+            }
             
-            myFunctionPath.addLineToPoint(CGPoint(x: widthDelta, y: transposedY ))
+            
+            
+            
+            
             widthDelta++
         }
         myFunctionPath.stroke()

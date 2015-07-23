@@ -45,10 +45,7 @@ class CalculatorViewController: UIViewController, CalculatorViewDataSource
             if fnResult!.isNaN || fnResult!.isInfinite {
                 return nil
             }
-           println("\(fnResult!)")
-           return CGFloat(fnResult!)
-            
-            
+            return CGFloat(fnResult!)
         }
         return nil
     }
